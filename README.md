@@ -235,3 +235,4 @@ Fork modifications copyright (c) 2026 G4MEOVER18
 ## Support
 
 **Bitcoin:** `39vZWmnUwDReQ15BwqQXzyqVQ6U8LardEf`
+**PayPal:** [paypal.me/Freakbank1](https://paypal.me/Freakbank1)
