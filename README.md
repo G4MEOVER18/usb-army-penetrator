@@ -3,85 +3,85 @@
 
 # USB Army Penetrator
 
-**Fork of [USB Army Knife by i-am-shodan](https://github.com/i-am-shodan/USBArmyKnife)** with extended hardware support and enhanced G4MEOVER RadioRemote UI.
+**Fork von [USB Army Knife by i-am-shodan](https://github.com/i-am-shodan/USBArmyKnife)** — erweitert um CYD-Board-Support, verbessertes T-Dongle-UI und G4MEOVER RadioRemote.
 
 <div align="center">
   <img src="./docs/images/t-dongle-s3-side.png" width="400px">
 </div>
 
-A compact, concealable USB/WiFi penetration testing platform for red teamers and security researchers. Plug into a target, run payloads via DuckyScript, exfiltrate over WiFi, or leave behind and control remotely — all from a phone or browser.
+Kompakte, verdeckte USB/WiFi-Penetrationstest-Plattform für Red-Teamer und Sicherheitsforscher. Einstecken, Payloads per DuckyScript ausführen, über WiFi exfiltrieren oder das Gerät hinterlassen und aus der Ferne steuern — alles vom Smartphone oder Browser aus.
 
-> **For authorized security testing and penetration testing only.** Only use on systems you own or have explicit written authorization to test.
+> **Nur für autorisierte Sicherheitstests und Penetrationstests.** Ausschließlich auf Systemen einsetzen, die du besitzt oder für die du eine ausdrückliche schriftliche Genehmigung hast.
 
 ---
 
-## What's different from upstream?
+## Was ist anders als upstream?
 
-This fork adds:
+Dieser Fork ergänzt:
 
-| Addition | Description |
-|----------|-------------|
-| **CYD board support** | Full TFT dashboard UI for the ESP32-2432S028R (Cheap Yellow Display) — status page, quick-launch buttons, payload monitoring, touch input |
-| **Enhanced T-Dongle UI** | Improved boot screen and multi-page status display for the LilyGo T-Dongle S3 |
-| **G4MEOVER RadioRemote** | Remote-control extensions in WebServer.cpp for WiFi-triggered payload execution |
-| **Improved WebUI** | Extended Bootstrap interface (`ui/content/index.html`) with additional controls |
-| **USB NCM fixes** | Additional stability patches in USBCore.cpp and USBMSC.cpp |
-| **Agent improvements** | SerialComms.cs and Program.cs enhancements for better agent communication |
+| Erweiterung | Beschreibung |
+|------------|-------------|
+| **CYD-Board-Support** | Vollständiges TFT-Dashboard für den ESP32-2432S028R (Cheap Yellow Display) — Statusseite, Schnellstart-Buttons, Payload-Monitoring, Touch-Eingabe |
+| **Verbessertes T-Dongle-UI** | Überarbeiteter Boot-Screen und mehrseitige Statusanzeige für den LilyGo T-Dongle S3 |
+| **G4MEOVER RadioRemote** | Fernsteuerungs-Erweiterungen in WebServer.cpp für WiFi-gesteuerte Payload-Ausführung |
+| **Erweitertes WebUI** | Ausgebautes Bootstrap-Interface (`ui/content/index.html`) mit zusätzlichen Steuerelementen |
+| **USB NCM Fixes** | Zusätzliche Stabilitätskorrekturen in USBCore.cpp und USBMSC.cpp |
+| **Agent-Verbesserungen** | SerialComms.cs und Program.cs für zuverlässigere Agent-Kommunikation |
 
 ---
 
 ## Features
 
-- **USB HID Attacks** — DuckyScript BadUSB, supports multiple keyboard layouts
-- **Mass Storage Emulation** — appear as USB drive or CDROM
-- **USB Network Device** — USB Ethernet / NCM adapter, PCAP capture
-- **WiFi & Bluetooth Attacks** — via ESP32 Marauder (deauth, evil AP, pcap)
-- **Remote Agent** — deploy an agent, execute commands over serial even on locked machines
-- **VNC Screen Pull** — view victim screen over device WiFi via noVNC
-- **Hot Mic** — stream microphone audio over WiFi
-- **Custom TFT UI** — run scripts with custom loading screens and progress bars
+- **USB HID Angriffe** — DuckyScript BadUSB, unterstützt mehrere Tastatur-Layouts
+- **Mass Storage Emulation** — als USB-Laufwerk oder CDROM erscheinen
+- **USB-Netzwerkgerät** — USB Ethernet / NCM-Adapter, PCAP-Aufzeichnung
+- **WiFi & Bluetooth Angriffe** — über ESP32 Marauder (Deauth, Evil AP, PCAP)
+- **Remote Agent** — Agent deployen, Befehle über Serial ausführen — auch auf gesperrten Systemen
+- **VNC Screen Pull** — Bildschirm des Ziels über Geräte-WiFi via noVNC einsehen
+- **Hot Mic** — Mikrofon-Audio über WiFi streamen
+- **Custom TFT UI** — Skripte mit eigenen Ladebildschirmen und Fortschrittsbalken
 
 ---
 
-## Supported Hardware
+## Unterstützte Hardware
 
-| Hardware | Notes |
-|----------|-------|
-| **LilyGo T-Dongle S3** ⭐ | Recommended. USB-A form factor, screen, hidden SD card |
-| **CYD ESP32-2432S028R** | New in this fork — 320×240 touch TFT, standalone dashboard |
-| **Evil Crow Cable Wind** | Covert USB cable with hidden ESP32-S3 |
-| **T-Watch S3** | Smart watch form factor |
-| **Waveshare ESP32-S3 1.47"** | Large screen variant |
-| **M5Stack AtomS3U** | Small form, no SD |
-| **ESP32 UDisk / ESP32 Key** | Budget option, no web interface |
-| **Waveshare RP2040-GEEK** | No Marauder, no NCM |
+| Hardware | Hinweise |
+|----------|---------|
+| **LilyGo T-Dongle S3** ⭐ | Empfohlen. USB-A-Formfaktor, Display, versteckte SD-Karte |
+| **CYD ESP32-2432S028R** | Neu in diesem Fork — 320×240 Touch-TFT, eigenständiges Dashboard |
+| **Evil Crow Cable Wind** | Verdecktes USB-Kabel mit verstecktem ESP32-S3 |
+| **T-Watch S3** | Smartwatch-Formfaktor |
+| **Waveshare ESP32-S3 1.47"** | Großes Display |
+| **M5Stack AtomS3U** | Klein, keine SD |
+| **ESP32 UDisk / ESP32 Key** | Budget-Option, kein Web-Interface |
+| **Waveshare RP2040-GEEK** | Kein Marauder, kein NCM |
 
 ---
 
-## Getting Started
+## Schnellstart
 
-### Prerequisites
+### Voraussetzungen
 
-- [Visual Studio Code](https://code.visualstudio.com/) + [PlatformIO extension](https://platformio.org/install/ide?install=vscode)
-- Or PlatformIO Core CLI: `pip install platformio`
+- [Visual Studio Code](https://code.visualstudio.com/) + [PlatformIO-Extension](https://platformio.org/install/ide?install=vscode)
+- Oder PlatformIO Core CLI: `pip install platformio`
 
 ### Build & Flash
 
 ```bash
-# Clone this repo
+# Repo klonen
 git clone https://github.com/G4MEOVER18/usb-army-penetrator.git
 cd usb-army-penetrator
 
-# Open in VSCode
+# In VSCode öffnen
 code .
 
-# In PlatformIO: select your board environment, then click Build → Upload
+# In PlatformIO: Board-Environment auswählen, dann Build → Upload
 # CLI:
 pio run -e LILYGO-T-Dongle-S3 -t upload
 pio run -e CYD-ESP32-2432S028 -t upload
 ```
 
-Available PlatformIO environments (in `platformio.ini`):
+Verfügbare PlatformIO-Environments (in `platformio.ini`):
 ```
 LILYGO-T-Dongle-S3
 CYD-ESP32-2432S028
@@ -92,147 +92,149 @@ EvilCrowWind
 TWatchS3
 ```
 
-### First Use
+### Erste Inbetriebnahme
 
-1. **Flash** the firmware for your board (see above)
-2. **Insert** a microSD card with your payloads (DuckyScript `.ds` files) — optional
-3. **Plug** the device into a USB port
-4. **Connect** to the WiFi access point the device creates (default SSID configured at runtime via web UI)
-5. **Open** the web interface: `http://4.3.2.1:8080`
-6. **Load** or write a DuckyScript payload and click Run
+1. **Flashen** — Firmware für das eigene Board aufgespielt (siehe oben)
+2. **SD-Karte** mit Payloads einlegen (DuckyScript `.ds`-Dateien) — optional
+3. **Gerät** in einen USB-Port einstecken
+4. **WLAN** des Geräts verbinden (Standard-SSID im Web-UI konfigurierbar)
+5. **Web-Interface** öffnen: `http://4.3.2.1:8080`
+6. **DuckyScript-Payload** laden oder schreiben und auf "Ausführen" klicken
 
 ---
 
-## Usage Guide
+## Bedienungsanleitung
 
-### Web Interface
+### Web-Interface
 
-After connecting to the device's WiFi AP and opening `http://4.3.2.1:8080`:
+Nach Verbindung mit dem WLAN-AP des Geräts und Aufruf von `http://4.3.2.1:8080`:
 
-| Section | Description |
+| Bereich | Beschreibung |
 |---------|-------------|
-| **Status** | Current USB mode, WiFi state, uptime, payload status |
-| **Payload Editor** | Write/load/run DuckyScript attacks |
-| **File Manager** | Browse SD card, upload/download files |
-| **Settings** | WiFi credentials, AP name, USB mode |
-| **VNC** | Screen view (requires agent deployment) |
+| **Status** | Aktueller USB-Modus, WLAN-Zustand, Laufzeit, Payload-Status |
+| **Payload-Editor** | DuckyScript-Angriffe schreiben, laden und ausführen |
+| **Dateimanager** | SD-Karte durchsuchen, Dateien hoch- und herunterladen |
+| **Einstellungen** | WLAN-Zugangsdaten, AP-Name, USB-Modus |
+| **VNC** | Bildschirmansicht (erfordert Agent-Deployment) |
 
-### DuckyScript Quick Reference
+### DuckyScript Kurzreferenz
 
 ```duckyscript
-# Type text
-STRING Hello World
+# Text eingeben
+STRING Hallo Welt
 ENTER
 
-# Key combos
+# Tastenkombinationen
 CTRL ALT DELETE
 GUI r
 STRING cmd
 ENTER
 
-# Delay (ms)
+# Verzögerung (Millisekunden)
 DELAY 1000
 
-# WiFi — connect to AP
-WIFI_CONNECT ssid password
+# WLAN — AP verbinden
+WIFI_CONNECT ssid passwort
 
-# Execute Marauder command
+# Marauder-Befehl ausführen
 ESP32M scan -w -t 5
 
-# Display image on TFT
-SHOW_IMAGE /myimage.png
+# Bild auf TFT anzeigen
+SHOW_IMAGE /meinbild.png
 
-# Self-destruct payload files
+# Payload-Dateien selbst zerstören
 WIPE_STORAGE
 ```
 
-Full DuckyScript reference: [USB Army Knife Wiki](https://github.com/i-am-shodan/USBArmyKnife/wiki)
+Vollständige DuckyScript-Referenz: [USB Army Knife Wiki](https://github.com/i-am-shodan/USBArmyKnife/wiki)
 
-### CYD Dashboard (ESP32-2432S028R)
+### CYD-Dashboard (ESP32-2432S028R)
 
-The CYD board shows a 4-page TFT interface:
+Das CYD-Board zeigt ein 4-seitiges TFT-Interface:
 
-| Page | Content |
-|------|---------|
-| **Page 0** | Dashboard — WiFi, SD, USB mode, RAM, uptime, network info |
-| **Page 1** | Quick Launch — touch 6 payload slots to run instantly |
-| **Page 2** | Payload status — current running script, last output |
-| **Page 3** | About / system info |
+| Seite | Inhalt |
+|-------|--------|
+| **Seite 0** | Dashboard — WLAN, SD, USB-Modus, RAM, Laufzeit, Netzwerkinfo |
+| **Seite 1** | Schnellstart — 6 Payload-Slots per Touch starten |
+| **Seite 2** | Payload-Status — aktuell laufendes Skript, letzte Ausgabe |
+| **Seite 3** | Info / Systemdaten |
 
-- **Touch** anywhere on page 0 → opens Quick Launch
-- **Button** → cycles pages
+- **Touch** auf Seite 0 → öffnet Schnellstart
+- **Button** → wechselt Seiten
 
-### Agent Deployment
+### Agent-Deployment
 
-The C# agent (`tools/Agent/`) provides covert command execution:
+Der C#-Agent (`tools/Agent/`) ermöglicht verdeckte Befehlsausführung:
 
 ```duckyscript
-# Deploy agent (Windows)
+# Agent deployen (Windows)
 INCLUDE install_agent_and_run_command/us-autorun.ds
 
-# After deploy — send commands via web interface
-# Commands execute on target, output appears in WebUI
+# Nach Deployment — Befehle über Web-Interface senden
+# Befehle werden auf dem Ziel ausgeführt, Ausgabe erscheint im WebUI
 ```
 
-The agent runs over the USB serial interface — no network socket opened on the target, no outbound connections, very low detection footprint.
+Der Agent kommuniziert über die USB-Seriell-Schnittstelle — kein Netzwerk-Socket auf dem Ziel, keine ausgehenden Verbindungen, minimaler Erkennungs-Fußabdruck.
 
 ---
 
-## Examples
+## Beispiele
 
-| Example | Description |
+| Beispiel | Beschreibung |
 |---------|-------------|
-| [Covert Storage](./examples/covertstorage/) | Appear as two different USB drives — full SD on first plug, benign drive after |
-| [Progress Bar](./examples/progressbar/) | Hollywood-style attack UI with animated progress |
-| [Ultimate RickRoll](./examples/rickroll/) | Keystroke inject + Marauder WiFi beacon spam |
-| [USB Ethernet PCAP](./examples/usb_ethernet_pcap/) | USB NIC + automatic PCAP capture |
-| [Install Agent](./examples/install_agent_and_run_command/) | Deploy agent, execute commands remotely |
-| [VNC Screen Pull](./examples/vnc/) | Deploy agent with VNC server, view screen via WebUI |
-| [Simple UI](./examples/simple_ui/) | Button-driven script launcher with custom screen |
-| [Hot Mic](./examples/hotmic/) | Stream microphone audio over WiFi |
-| [Linux Panic](./examples/linux_panic/) | Bad filesystem triggers kernel panic on automount |
-| [Evil USB NIC](./examples/malicious_ethernet_adapter/) | Fake NIC that presents a driver CDROM |
-| [EvilAP](./examples/evilap/) | Deceptive WiFi access point via Marauder |
-| [WiFi Deauth + PCAP](./examples/wifi_deauth_and_crypt_capture/) | Deauth clients, capture handshake |
+| [Covert Storage](./examples/covertstorage/) | Als zwei verschiedene USB-Laufwerke erscheinen — volle SD beim ersten Einstecken, harmloses Laufwerk danach |
+| [Progress Bar](./examples/progressbar/) | Hollywood-artiges Angriffs-UI mit animiertem Fortschritt |
+| [Ultimate RickRoll](./examples/rickroll/) | Tastatur-Injection + Marauder WiFi-Beacon-Spam |
+| [USB Ethernet PCAP](./examples/usb_ethernet_pcap/) | USB-NIC + automatische PCAP-Aufzeichnung |
+| [Install Agent](./examples/install_agent_and_run_command/) | Agent deployen, Befehle aus der Ferne ausführen |
+| [VNC Screen Pull](./examples/vnc/) | Agent mit VNC-Server deployen, Bildschirm über WebUI einsehen |
+| [Simple UI](./examples/simple_ui/) | Schaltflächen-gesteuerter Skript-Launcher mit eigenem Screen |
+| [Hot Mic](./examples/hotmic/) | Mikrofon-Audio über WiFi streamen |
+| [Linux Panic](./examples/linux_panic/) | Fehlerhafte Dateisystem-Emulation löst Kernel-Panic bei Automount aus |
+| [Evil USB NIC](./examples/malicious_ethernet_adapter/) | Gefälschter NIC, der eine Treiber-CDROM präsentiert |
+| [EvilAP](./examples/evilap/) | Täuschender WiFi-AP via Marauder |
+| [WiFi Deauth + PCAP](./examples/wifi_deauth_and_crypt_capture/) | Deauth-Clients, Handshake aufzeichnen |
 
 ---
 
-## Build from Source (advanced)
+## Build aus Quellcode
 
 ```bash
-# Install PlatformIO CLI
+# PlatformIO CLI installieren
 pip install platformio
 
-# Build all environments
+# Alle Environments bauen
 pio run
 
-# Build specific board
+# Einzelnes Board bauen
 pio run -e LILYGO-T-Dongle-S3
 
-# Flash
+# Flashen
 pio run -e LILYGO-T-Dongle-S3 -t upload
 ```
 
 ---
 
-## Upstream / Credits
+## Quellen / Danksagung
 
-This project is a fork of **[USB Army Knife](https://github.com/i-am-shodan/USBArmyKnife)** by [@i-am-shodan](https://github.com/i-am-shodan), licensed MIT.
+Dieses Projekt ist ein Fork von **[USB Army Knife](https://github.com/i-am-shodan/USBArmyKnife)** von [@i-am-shodan](https://github.com/i-am-shodan), lizenziert unter MIT.
 
-WiFi/Bluetooth attack capability via **[ESP32 Marauder](https://github.com/justcallmekoko/ESP32Marauder)** by justcallmekoko.
+WiFi/Bluetooth-Angriffsfähigkeiten via **[ESP32 Marauder](https://github.com/justcallmekoko/ESP32Marauder)** von justcallmekoko.
 
 ---
 
-## License
+## Lizenz
 
-MIT License — see [LICENSE](LICENSE)
+MIT License — siehe [LICENSE](LICENSE)
 
-Original work copyright (c) 2024 i-am-shodan  
-Fork modifications copyright (c) 2026 G4MEOVER18
+Originalwerk Copyright (c) 2024 i-am-shodan  
+Fork-Änderungen Copyright (c) 2026 G4MEOVER18
 
 ---
 
 ## Support
 
-**Bitcoin:** `39vZWmnUwDReQ15BwqQXzyqVQ6U8LardEf`
+Wenn dieses Projekt deiner eigenen Forschung geholfen hat:
+
+**Bitcoin:** `39vZWmnUwDReQ15BwqQXzyqVQ6U8LardEf`  
 **PayPal:** [paypal.me/Freakbank1](https://paypal.me/Freakbank1)
