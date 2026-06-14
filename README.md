@@ -232,7 +232,11 @@ Fork-Änderungen Copyright (c) 2026 G4MEOVER18
 
 ---
 
-## Support
+## Kontakt & Support
+
+**Entwickler:** Yanis Ameseder · **E-Mail:** [g4me.over.18@gmail.com](mailto:g4me.over.18@gmail.com)
+
+Fragen, Bug-Reports und Feature-Wünsche gerne per [Issue](https://github.com/G4MEOVER18/usb-army-penetrator/issues) oder E-Mail.
 
 Wenn dieses Projekt deiner eigenen Forschung geholfen hat:
 
