@@ -60,7 +60,31 @@ Dieser Fork ergänzt:
 
 ## Schnellstart
 
-### Voraussetzungen
+### Fertige Firmware (empfohlen)
+
+Vorkompilierte, flashfertige Images für die gängigsten Boards gibt es unter
+[**Releases**](https://github.com/G4MEOVER18/usb-army-penetrator/releases/latest) —
+kein Build-Setup nötig.
+
+| Board | Merged-Image (Offset 0x0) |
+|-------|---------------------------|
+| **LilyGo T-Dongle S3** ⭐ | `…_LILYGO-T-Dongle-S3_v1.1.0_merged.bin` |
+| **CYD ESP32-2432S028R** | `…_CYD-ESP32-2432S028_v1.1.0_merged.bin` |
+| **Generic ESP32-S3** | `…_Generic-ESP32-S3_v1.1.0_merged.bin` |
+| **M5Stack AtomS3U** | `…_M5-Atom-S3U_v1.1.0_merged.bin` |
+| **Waveshare ESP32-S3 1.47"** | `…_Waveshare-ESP32-S3-LCD-1_47_v1.1.0_merged.bin` |
+
+Flashen (das merged-Image enthält Bootloader + Partitionen + App):
+
+```bash
+# ESP32-S3-Boards (T-Dongle, Generic-S3, M5 AtomS3U, Waveshare):
+esptool.py --chip esp32s3 write_flash 0x0 <merged.bin>
+
+# CYD ist klassisches ESP32:
+esptool.py --chip esp32 write_flash 0x0 <merged.bin>
+```
+
+### Selbst bauen — Voraussetzungen
 
 - [Visual Studio Code](https://code.visualstudio.com/) + [PlatformIO-Extension](https://platformio.org/install/ide?install=vscode)
 - Oder PlatformIO Core CLI: `pip install platformio`
