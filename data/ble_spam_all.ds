@@ -1,0 +1,3 @@
+REM G4MEOVER — BLE-Spam (autorisierte Tests). Funk-getriggert via ukfe_rf.
+WEB_OFF
+ESP32M blespam -t all

