@@ -27,6 +27,9 @@ void loop() {}
 #ifdef G4MEOVER_UKFE_RF
 #include "Comms/Radio/UkfeRfControl.h"
 #endif
+#ifdef G4MEOVER_UKFE_UART
+#include "Comms/Radio/UkfeUartControl.h"
+#endif
 
 #include "Debug/Logging.h"
 #include "AuxiliaryComponent/Auxiliary.h"
@@ -654,6 +657,9 @@ void setup()
 #ifdef G4MEOVER_UKFE_RF
   Comms::UkfeRf.begin(prefs);
 #endif
+#ifdef G4MEOVER_UKFE_UART
+  Comms::UkfeUart.begin(prefs);
+#endif
 
   if (!Devices::Storage.isRunning())
   {
@@ -857,6 +863,9 @@ void loop()
   Attacks::Agent.loop(prefs);
 #ifdef G4MEOVER_UKFE_RF
   Comms::UkfeRf.loop(prefs);
+#endif
+#ifdef G4MEOVER_UKFE_UART
+  Comms::UkfeUart.loop(prefs);
 #endif
 
   aux.loop(prefs);
