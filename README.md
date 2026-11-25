@@ -3,6 +3,8 @@
 
 # USB Army Penetrator
 
+[![CI](https://github.com/G4MEOVER18/usb-army-penetrator/actions/workflows/platformio-build.yml/badge.svg)](https://github.com/G4MEOVER18/usb-army-penetrator/actions/workflows/platformio-build.yml)
+
 **Fork von [USB Army Knife by i-am-shodan](https://github.com/i-am-shodan/USBArmyKnife)** — erweitert um CYD-Board-Support, verbessertes T-Dongle-UI und G4MEOVER RadioRemote.
 
 <div align="center">
